@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CPH IT Workroom</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        templeDark: '#101010',      // Deep black background
+                        templePanel: '#1a1a1a',     // Slightly lighter panel
+                        templeCard: '#262626',      // Card background
+                        templeCherry: '#9D2235',    // OFFICIAL TEMPLE CHERRY
+                        templeCherryBright: '#C52844', // Brighter cherry for text readability
+                        statusNew: '#FFD700',       // Gold (Temple Accent) for New Tickets
+                        statusActive: '#00ced1'     // Dark Turquoise for Active
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Roboto', 'Segoe UI', sans-serif; }
+        /* Custom Scrollbar for clean look (still used for staff list) */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* Fade animation for page transitions */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-templeDark text-gray-200 h-screen w-screen overflow-hidden flex">
+
+    <div class="w-[35%] h-full bg-templePanel border-r-2 border-templeCherry flex flex-col p-6">
+        
+        <div class="mb-8 text-center bg-templeDark rounded-xl py-6 border border-gray-800 shadow-md">
+            <div id="clock" class="text-7xl font-bold text-white tracking-wider">00:00</div>
+            <div id="date" class="text-2xl text-templeCherryBright font-bold mt-2 uppercase tracking-widest">Loading...</div>
+        </div>
+
+        <div class="flex-grow flex flex-col min-h-0">
+            <h1 class="text-3xl font-black text-white border-b-4 border-templeCherry pb-3 mb-6 uppercase italic">
+                Today's Staff
+            </h1>
+            
+            <div id="shift-list" class="flex-grow overflow-y-auto space-y-4 pr-2">
+                <div class="text-gray-500 italic text-xl p-4">Loading schedule...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-[65%] h-full bg-templeDark p-8 flex flex-col">
+        <h1 class="text-3xl font-black text-white border-b-4 border-gray-700 pb-3 mb-6 flex justify-between items-center uppercase italic">
+            <span>
+                Ticket Queue
+                <span id="page-indicator" class="ml-4 text-lg text-gray-500 font-mono font-normal normal-case"></span>
+            </span>
+            <span class="text-sm font-bold text-templeDark bg-gray-400 px-3 py-1 rounded">
+                Auto Refresh
+            </span>
+        </h1>
+
+        <div id="ticket-list" class="grid grid-cols-1 xl:grid-cols-2 gap-6 overflow-hidden pb-4 h-full content-start">
+            <div class="col-span-full text-gray-500 italic text-xl">Loading tickets...</div>
+        </div>
+    </div>
+
+    <script>
+        // --- GLOBAL VARIABLES FOR PAGINATION ---
+        let allTicketsData = [];
+        let currentTicketPage = 0;
+        const TICKETS_PER_PAGE = 6; // Configured for 6 cards
+        let ticketCycleInterval;
+
+        // --- 1. CLOCK LOGIC ---
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const dateOptions = { weekday: 'long', month: 'short', day: 'numeric' };
+            document.getElementById('date').innerText = now.toLocaleDateString('en-US', dateOptions);
+        }
+
+        // --- 2. DATA FETCHING ---
+        async function fetchData() {
+            try {
+                // Mocking data for example purposes if API fails (Remove logic inside catch if you have real API)
+                // In a real scenario, this fetches from your endpoints
+                const [shiftsRes, ticketsRes] = await Promise.all([
+                    fetch('/api/shifts'),
+                    fetch('/api/tickets')
+                ]);
+
+                if (!shiftsRes.ok || !ticketsRes.ok) throw new Error("API call failed");
+
+                const shifts = await shiftsRes.json();
+                const tickets = await ticketsRes.json();
+
+                updateShifts(shifts);
+                handleTicketData(tickets);
+
+            } catch (error) {
+                console.error("Error loading dashboard data:", error);
+                
+                // --- TEST DATA (FOR DEMONSTRATION ONLY - REMOVE IN PRODUCTION) ---
+                // If API fails, I'm generating 14 dummy tickets to show you the scrolling works
+                const dummyTickets = Array.from({length: 14}, (_, i) => ({
+                    id: 1000 + i,
+                    assignedTo: i % 2 === 0 ? "Gavin" : "Unassigned",
+                    title: `Test Ticket #${i+1} - This represents a ticket description that might be long.`,
+                    status: i < 3 ? 'New' : 'Active'
+                }));
+                handleTicketData(dummyTickets); 
+                // -----------------------------------------------------------------
+            }
+        }
+
+        // --- 3. DOM UPDATE FUNCTIONS ---
+        function updateShifts(shifts) {
+            const container = document.getElementById('shift-list');
+            if (!shifts || shifts.length === 0) {
+                container.innerHTML = `<div class="text-gray-500 italic text-xl p-4">No shifts scheduled today.</div>`;
+                return;
+            }
+            
+            container.innerHTML = shifts.map(s => `
+                <div class="bg-templeCard p-5 rounded-md border-l-[10px] border-templeCherry shadow-md flex justify-between items-center group hover:bg-[#333] transition-colors">
+                    <div>
+                        <h2 class="text-3xl font-bold text-white mb-1 group-hover:text-templeCherryBright transition-colors">${s.name}</h2>
+                        <p class="text-xl text-gray-400 font-mono">${s.timeRange}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- 4. TICKET PAGINATION LOGIC ---
+
+        function handleTicketData(tickets) {
+            allTicketsData = tickets || [];
+            
+            // If we receive new data, reset to page 0 to show most relevant first
+            currentTicketPage = 0;
+            
+            renderTicketPage();
+            startTicketCycle();
+        }
+
+        function renderTicketPage() {
+            const container = document.getElementById('ticket-list');
+            const indicator = document.getElementById('page-indicator');
+
+            if (allTicketsData.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-gray-500 italic text-xl">No active tickets found.</div>`;
+                indicator.innerText = "";
+                return;
+            }
+
+            // Calculate slicing
+            const start = currentTicketPage * TICKETS_PER_PAGE;
+            const end = start + TICKETS_PER_PAGE;
+            const ticketsToShow = allTicketsData.slice(start, end);
+            const totalPages = Math.ceil(allTicketsData.length / TICKETS_PER_PAGE);
+
+            // Update Indicator
+            if (totalPages > 1) {
+                indicator.innerText = `(Page ${currentTicketPage + 1} of ${totalPages})`;
+            } else {
+                indicator.innerText = "";
+            }
+
+            // Render HTML
+            const html = ticketsToShow.map(t => {
+                const isNew = t.status === 'New';
+                const statusColor = isNew ? 'text-statusNew border-statusNew' : 'text-statusActive border-statusActive';
+                const badgeBg = isNew ? 'bg-yellow-900/30' : 'bg-teal-900/30';
+
+                return `
+                <div class="bg-templeCard p-6 rounded-md shadow-lg border-t-4 ${statusColor.split(' ')[1]} flex flex-col justify-between h-48 fade-in">
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-sm font-mono text-gray-500">#${t.id}</span>
+                            <span class="text-sm font-bold text-white bg-templeCherry px-2 py-1 rounded">${t.assignedTo}</span>
+                        </div>
+                        <h2 class="text-2xl font-semibold text-gray-100 leading-tight line-clamp-3">${t.title}</h2>
+                    </div>
+                    <div class="mt-4 flex items-center">
+                        <span class="text-sm font-bold tracking-wider uppercase px-3 py-1 rounded ${badgeBg} ${statusColor.split(' ')[0]}">
+                            ${t.status}
+                        </span>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            container.innerHTML = html;
+        }
+
+        function startTicketCycle() {
+            // Clear existing interval to prevent duplicates
+            if (ticketCycleInterval) clearInterval(ticketCycleInterval);
+
+            // Set new interval (10 seconds)
+            ticketCycleInterval = setInterval(() => {
+                const totalPages = Math.ceil(allTicketsData.length / TICKETS_PER_PAGE);
+                
+                // Only scroll if there is more than 1 page
+                if (totalPages > 1) {
+                    currentTicketPage++;
+                    if (currentTicketPage >= totalPages) {
+                        currentTicketPage = 0; // Loop back to start
+                    }
+                    renderTicketPage();
+                }
+            }, 10000); // 10000ms = 10 seconds
+        }
+
+        // --- INITIALIZATION ---
+        setInterval(updateClock, 1000);
+        setInterval(fetchData, 60000); // Fetch data every minute
+        updateClock();
+        fetchData();
+    </script>
+</body>
+</html>
