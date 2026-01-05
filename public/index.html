@@ -66,8 +66,8 @@
                 Ticket Queue
                 <span id="page-indicator" class="ml-4 text-lg text-gray-500 font-mono font-normal normal-case"></span>
             </span>
-            <span class="text-sm font-bold text-templeDark bg-gray-400 px-3 py-1 rounded">
-                Auto Refresh
+            <span class="text-sm font-bold text-templeDark bg-gray-400 px-3 py-1 rounded flex items-center gap-1">
+                REFRESH IN: <span id="refresh-timer" class="font-mono w-5 text-center">60</span>
             </span>
         </h1>
 
@@ -80,11 +80,12 @@
         // --- GLOBAL VARIABLES FOR PAGINATION ---
         let allTicketsData = [];
         let currentTicketPage = 0;
-        const TICKETS_PER_PAGE = 8; // Configured for 6 cards
+        const TICKETS_PER_PAGE = 8;
         let ticketCycleInterval;
         let allShiftsData = { today: [], tomorrow: [] };
         let currentStaffView = 'today'; // Toggle between 'today' and 'tomorrow'
         let staffCycleInterval;
+        let refreshCountdown = 60; 
 
         // --- 1. CLOCK LOGIC ---
         function updateClock() {
@@ -92,6 +93,24 @@
             document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             const dateOptions = { weekday: 'long', month: 'short', day: 'numeric' };
             document.getElementById('date').innerText = now.toLocaleDateString('en-US', dateOptions);
+        }
+        
+        // --- REFRESH TIMER LOGIC ---
+        function startRefreshTimer() {
+            // We use a separate interval for the UI so it updates every second
+            setInterval(() => {
+                refreshCountdown--;
+                
+                const timerEl = document.getElementById('refresh-timer');
+                if (timerEl) {
+                    timerEl.innerText = refreshCountdown;
+                }
+
+                // When it hits 0, the next fetchData call will reset it
+                if (refreshCountdown <= 0) {
+                    refreshCountdown = 60; 
+                }
+            }, 1000);
         }
 
         // --- 2. DATA FETCHING ---
@@ -112,6 +131,8 @@
                 renderStaff();
                 startStaffCycle(); // Start the flip timer
                 handleTicketData(tickets);
+
+                refreshCountdown = 60;
 
             } catch (error) {
                 console.error("Error loading dashboard data:", error);
@@ -253,6 +274,7 @@
         setInterval(fetchData, 60000); // Fetch data every minute
         updateClock();
         fetchData();
+        startRefreshTimer();
     </script>
 </body>
 </html>
