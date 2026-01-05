@@ -8,14 +8,12 @@ from tdx_client import TDXClient
 # CONFIGURATION
 # -------------------------------------------------
 
-TEAM_UIDS = [
+ALL_UIDS = [
     "80c0c3d5-d245-f011-9fa5-9c0eadb6129c",
     "8ab9df26-d145-f011-9fa5-9c0eadb6129c",
     "07d8cdbd-d245-f011-9fa5-9c0eadb6129c",
     "1acfd965-cf45-f011-9fa5-9c0eadb6129c"
 ]
-
-ALL_UIDS = TEAM_UIDS
 
 def main():
     try:
@@ -26,14 +24,10 @@ def main():
         all_found_tickets = []
 
         # ---------------------------------------------------------
-        # REQUEST: Tickets assigned to me OR my teammates
-        # ---------------------------------------------------------
         # Uses TicketSearch.ResponsibilityUids (Guid[])
         payload_team = {
             "MaxResults": 500,
             "ResponsibilityUids": ALL_UIDS
-            # If you specifically want only primary-responsibility:
-            # "PrimaryResponsibilityUids": ALL_UIDS
         }
 
         try:
