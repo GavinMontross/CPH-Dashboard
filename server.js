@@ -17,7 +17,7 @@ app.get('/api/search', (req, res) => {
     const serialNumber = req.query.serial;
     if (!serialNumber) return res.status(400).json({ error: "Serial required" });
 
-    const pythonProcess = spawn('python', [
+    const pythonProcess = spawn(path.join(__dirname, '.venv/bin/python3'), [
         path.join(__dirname, 'python', 'search_bridge.py'), 
         serialNumber
     ]);
