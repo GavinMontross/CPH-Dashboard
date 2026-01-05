@@ -8,17 +8,14 @@ from tdx_client import TDXClient
 # CONFIGURATION
 # -------------------------------------------------
 
-# Your personal UID
-MY_UID = "80c0c3d5-d245-f011-9fa5-9c0eadb6129c"
-
-# Other team members' UIDs
 TEAM_UIDS = [
+    "80c0c3d5-d245-f011-9fa5-9c0eadb6129c",
     "8ab9df26-d145-f011-9fa5-9c0eadb6129c",
     "07d8cdbd-d245-f011-9fa5-9c0eadb6129c",
     "1acfd965-cf45-f011-9fa5-9c0eadb6129c"
 ]
 
-ALL_UIDS = [MY_UID] + TEAM_UIDS
+ALL_UIDS = TEAM_UIDS
 
 def main():
     try:

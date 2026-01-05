@@ -93,8 +93,6 @@ app.get('/api/shifts', async (req, res) => {
 
 // --- ROUTE 3: Get Tickets (Real Python Bridge) ---
 app.get('/api/tickets', (req, res) => {
-    console.log("[Node] Fetching real tickets via Python...");
-
     const pythonProcess = spawn('python', [
         path.join(__dirname, 'python', 'tickets_bridge.py')
     ]);
@@ -116,7 +114,6 @@ app.get('/api/tickets', (req, res) => {
         }
         try {
             const tickets = JSON.parse(dataString);
-            console.log(`[Node] Found ${tickets.length} tickets for the team.`);
             res.json(tickets);
         } catch (e) {
             console.error("Failed to parse ticket JSON");
