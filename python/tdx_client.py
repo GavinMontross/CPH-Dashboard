@@ -1,5 +1,4 @@
 import requests
-import json
 import config  # Ensure config.py has BASE_URL, USERNAME, PASSWORD, and APP_ID
 
 
