@@ -18,13 +18,13 @@ app.get('/api/search', (req, res) => {
     if (!serialNumber) return res.status(400).json({ error: "Serial required" });
 
     const pythonProcess = spawn(path.join(__dirname, '.venv/bin/python3'), [
-        path.join(__dirname, 'python', 'search_bridge.py'), 
+        path.join(__dirname, 'python', 'search_bridge.py'),
         serialNumber
     ]);
 
     let dataString = '';
     pythonProcess.stdout.on('data', (data) => dataString += data.toString());
-    
+
     pythonProcess.on('close', (code) => {
         if (code !== 0) return res.status(500).json({ error: "Search failed" });
         try {
@@ -40,7 +40,7 @@ app.get('/api/shifts', async (req, res) => {
     try {
         const events = await ical.async.fromURL(CALENDAR_ICS_URL);
         const now = moment().tz("America/New_York");
-        
+
         // Time Ranges
         const startToday = now.clone().startOf('day');
         const endToday = now.clone().endOf('day');
@@ -70,7 +70,7 @@ app.get('/api/shifts', async (req, res) => {
             if (ev.rrule) {
                 const todayDates = ev.rrule.between(startToday.toDate(), endToday.toDate());
                 const tomorrowDates = ev.rrule.between(startTomorrow.toDate(), endTomorrow.toDate());
-                
+
                 if (todayDates.length > 0) shifts.today.push(processEvent(todayDates[0]));
                 if (tomorrowDates.length > 0) shifts.tomorrow.push(processEvent(tomorrowDates[0]));
             } else {
@@ -86,7 +86,7 @@ app.get('/api/shifts', async (req, res) => {
         // Sort both arrays
         shifts.today.sort((a, b) => a.sortTime - b.sortTime);
         shifts.tomorrow.sort((a, b) => a.sortTime - b.sortTime);
-        
+
         res.json(shifts);
     } catch (error) {
         console.error("Calendar Error:", error.message);
@@ -113,7 +113,7 @@ app.get('/api/tickets', (req, res) => {
     pythonProcess.on('close', (code) => {
         if (code !== 0) {
             console.error("Ticket script failed with code", code);
-            return res.json([]); 
+            return res.json([]);
         }
         try {
             const tickets = JSON.parse(dataString);

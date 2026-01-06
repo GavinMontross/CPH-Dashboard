@@ -15,7 +15,9 @@ try:
     APP_ID = int(os.getenv("TDX_APP_ID"))
 except (TypeError, ValueError):
     # This will cause the script to crash later if not fixed, but prevents immediate import error
-    APP_ID = None 
+    APP_ID = None
 
 if not all([BASE_URL, USERNAME, PASSWORD, APP_ID]):
-    raise ValueError("Missing credentials! Check your .env file for BASE_URL, USERNAME, PASSWORD, and TDX_APP_ID.")
+    raise ValueError(
+        "Missing credentials! Check your .env file for BASE_URL, USERNAME, PASSWORD, and TDX_APP_ID."
+    )

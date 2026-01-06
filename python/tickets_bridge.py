@@ -12,23 +12,21 @@ ALL_UIDS = [
     "80c0c3d5-d245-f011-9fa5-9c0eadb6129c",
     "8ab9df26-d145-f011-9fa5-9c0eadb6129c",
     "07d8cdbd-d245-f011-9fa5-9c0eadb6129c",
-    "1acfd965-cf45-f011-9fa5-9c0eadb6129c"
+    "1acfd965-cf45-f011-9fa5-9c0eadb6129c",
 ]
+
 
 def main():
     try:
         client = TDXClient()
         url = f"{client.base_url}/api/{config.APP_ID}/tickets/search"
         headers = client.get_headers()
-        
+
         all_found_tickets = []
 
         # ---------------------------------------------------------
         # Uses TicketSearch.ResponsibilityUids (Guid[])
-        payload_team = {
-            "MaxResults": 500,
-            "ResponsibilityUids": ALL_UIDS
-        }
+        payload_team = {"MaxResults": 500, "ResponsibilityUids": ALL_UIDS}
 
         try:
             resp_team = requests.post(url, headers=headers, json=payload_team)
@@ -43,7 +41,7 @@ def main():
         # ---------------------------------------------------------
         dashboard_tickets = []
         seen_ids = set()
-        
+
         ignored_statuses = ["Resolved", "Closed", "Cancelled"]
 
         for t in all_found_tickets:
@@ -62,7 +60,7 @@ def main():
             # 3. Determine Display Owner
             r_name = t.get("ResponsibleFullName")
             r_group_name = t.get("ResponsibleGroupName")
-            
+
             if r_name:
                 display_owner = r_name
             elif r_group_name:
@@ -70,19 +68,22 @@ def main():
             else:
                 display_owner = "Unassigned"
 
-            dashboard_tickets.append({
-                "id": ticket_id,
-                "title": t.get("Title"),
-                "assignedTo": display_owner,
-                "status": status_name
-            })
+            dashboard_tickets.append(
+                {
+                    "id": ticket_id,
+                    "title": t.get("Title"),
+                    "assignedTo": display_owner,
+                    "status": status_name,
+                }
+            )
 
         # Output Final JSON
         print(json.dumps(dashboard_tickets))
 
     except Exception as e:
-        print(json.dumps([])) 
+        print(json.dumps([]))
         sys.stderr.write(f"CRITICAL ERROR: {str(e)}\n")
+
 
 if __name__ == "__main__":
     main()
