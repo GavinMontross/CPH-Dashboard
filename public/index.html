@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,37 +24,62 @@
         }
     </script>
     <style>
-        body { font-family: 'Roboto', 'Segoe UI', sans-serif; }
+        body {
+            font-family: 'Roboto', 'Segoe UI', sans-serif;
+        }
+
         /* Custom Scrollbar for clean look (still used for staff list) */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1a1a1a; }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
 
         /* Fade animation for page transitions */
         .fade-in {
             animation: fadeIn 0.5s ease-in-out;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body class="bg-templeDark text-gray-200 h-screen w-screen overflow-hidden flex">
 
     <div class="w-[35%] h-full bg-templePanel border-r-2 border-templeCherry flex flex-col p-6">
-        
+
         <div class="mb-8 text-center bg-templeDark rounded-xl py-6 border border-gray-800 shadow-md">
             <div id="clock" class="text-7xl font-bold text-white tracking-wider">00:00</div>
-            <div id="date" class="text-2xl text-templeCherryBright font-bold mt-2 uppercase tracking-widest">Loading...</div>
+            <div id="date" class="text-2xl text-templeCherryBright font-bold mt-2 uppercase tracking-widest">Loading...
+            </div>
         </div>
 
         <div class="flex-grow flex flex-col min-h-0">
             <h1 class="text-3xl font-black text-white border-b-4 border-templeCherry pb-3 mb-6 uppercase italic">
                 <span id="staff-view-title">Today's Staff</span>
             </h1>
-            
+
             <div id="shift-list" class="flex-grow overflow-y-auto space-y-4 pr-2">
                 <div class="text-gray-500 italic text-xl p-4">Loading schedule...</div>
             </div>
@@ -61,12 +87,14 @@
     </div>
 
     <div class="w-[65%] h-full bg-templeDark p-8 flex flex-col">
-        <h1 class="text-3xl font-black text-white border-b-4 border-gray-700 pb-3 mb-6 flex justify-between items-center uppercase italic">
+        <h1
+            class="text-3xl font-black text-white border-b-4 border-gray-700 pb-3 mb-6 flex justify-between items-center uppercase italic">
             <span>
                 Ticket Queue
                 <span id="page-indicator" class="ml-4 text-lg text-gray-500 font-mono font-normal normal-case"></span>
             </span>
-            <span class="text-sm font-bold text-templeDark bg-gray-400 px-3 py-1 rounded flex items-baseline leading-tight not-italic">
+            <span
+                class="text-sm font-bold text-templeDark bg-gray-400 px-3 py-1 rounded flex items-baseline leading-tight not-italic">
                 <span class="mr-1.5">REFRESH IN:</span>
                 <span id="refresh-timer" class="font-mono tabular-nums w-6 text-center">60
                 </span>
@@ -90,22 +118,22 @@
         let allShiftsData = { today: [], tomorrow: [] };
         let currentStaffView = 'today'; // Toggle between 'today' and 'tomorrow'
         let staffCycleInterval;
-        let refreshCountdown = 60; 
+        let refreshCountdown = 60;
 
         // --- 1. CLOCK LOGIC ---
         function updateClock() {
             const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             const dateOptions = { weekday: 'long', month: 'short', day: 'numeric' };
             document.getElementById('date').innerText = now.toLocaleDateString('en-US', dateOptions);
         }
-        
+
         // --- REFRESH TIMER LOGIC ---
         function startRefreshTimer() {
             // We use a separate interval for the UI so it updates every second
             setInterval(() => {
                 refreshCountdown--;
-                
+
                 const timerEl = document.getElementById('refresh-timer');
                 if (timerEl) {
                     timerEl.innerText = refreshCountdown;
@@ -113,7 +141,7 @@
 
                 // When it hits 0, the next fetchData call will reset it
                 if (refreshCountdown <= 0) {
-                    refreshCountdown = 60; 
+                    refreshCountdown = 60;
                 }
             }, 1000);
         }
@@ -141,16 +169,16 @@
 
             } catch (error) {
                 console.error("Error loading dashboard data:", error);
-                
+
                 // --- TEST DATA (FOR DEMONSTRATION ONLY - REMOVE IN PRODUCTION) ---
                 // If API fails, I'm generating 14 dummy tickets to show you the scrolling works
-                const dummyTickets = Array.from({length: 14}, (_, i) => ({
+                const dummyTickets = Array.from({ length: 14 }, (_, i) => ({
                     id: 1000 + i,
                     assignedTo: i % 2 === 0 ? "Gavin" : "Unassigned",
-                    title: `Test Ticket #${i+1} - This represents a ticket description that might be long.`,
+                    title: `Test Ticket #${i + 1} - This represents a ticket description that might be long.`,
                     status: i < 3 ? 'New' : 'Active'
                 }));
-                handleTicketData(dummyTickets); 
+                handleTicketData(dummyTickets);
                 // -----------------------------------------------------------------
             }
         }
@@ -158,18 +186,18 @@
         function renderStaff() {
             const container = document.getElementById('shift-list');
             const title = document.getElementById('staff-view-title');
-            
+
             // allShiftsData is now an object: { today: [...], tomorrow: [...] }
             const shifts = allShiftsData[currentStaffView];
 
             // Update the UI Header
             title.innerText = currentStaffView === 'today' ? "Today's Staff" : "Tomorrow's Staff";
-            
+
             if (!shifts || shifts.length === 0) {
                 container.innerHTML = `<div class="text-gray-500 italic text-xl p-4 fade-in">No shifts scheduled.</div>`;
                 return;
             }
-            
+
             // Map the shifts to HTML
             container.innerHTML = shifts.map(s => `
                 <div class="bg-templeCard p-5 rounded-md border-l-[10px] border-templeCherry shadow-md flex justify-between items-center group hover:bg-[#333] transition-colors fade-in">
@@ -184,7 +212,7 @@
         // Logic to swap between Today and Tomorrow
         function startStaffCycle() {
             if (staffCycleInterval) clearInterval(staffCycleInterval);
-            
+
             staffCycleInterval = setInterval(() => {
                 // Toggle the view
                 currentStaffView = (currentStaffView === 'today') ? 'tomorrow' : 'today';
@@ -196,10 +224,10 @@
 
         function handleTicketData(tickets) {
             allTicketsData = tickets || [];
-            
+
             // If we receive new data, reset to page 0 to show most relevant first
             currentTicketPage = 0;
-            
+
             renderTicketPage();
             startTicketCycle();
         }
@@ -262,7 +290,7 @@
             // Set new interval (10 seconds)
             ticketCycleInterval = setInterval(() => {
                 const totalPages = Math.ceil(allTicketsData.length / TICKETS_PER_PAGE);
-                
+
                 // Only scroll if there is more than 1 page
                 if (totalPages > 1) {
                     currentTicketPage++;
@@ -282,4 +310,5 @@
         startRefreshTimer();
     </script>
 </body>
+
 </html>
