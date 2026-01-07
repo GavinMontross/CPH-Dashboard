@@ -54,8 +54,7 @@ app.get('/api/shifts', async (req, res) => {
             if (ev.type !== 'VEVENT') continue;
 
             const processEvent = (date) => {
-                const rawDate = moment(date).utc();
-                const eventStart = moment.tz(rawDate.format('YYYY-MM-DD HH:mm:ss'), "America/New_York");
+                const eventStart = moment(date).tz("America/New_York");
                 const durationMillis = new Date(ev.end) - new Date(ev.start);
                 const eventEnd = eventStart.clone().add(durationMillis, 'milliseconds');
 
