@@ -35,63 +35,58 @@ app.get('/api/search', (req, res) => {
     });
 });
 
-// --- ROUTE 2: Get Today and Tomorrow's Shifts ---
+// --- ROUTE 2: Get Today and Tomorrow's Shifts (FIXED) ---
 app.get('/api/shifts', async (req, res) => {
     try {
         const events = await ical.async.fromURL(CALENDAR_ICS_URL);
+
         const now = moment().tz("America/New_York");
 
-        // Time Ranges
         const startToday = now.clone().startOf('day');
         const endToday = now.clone().endOf('day');
         const startTomorrow = now.clone().add(1, 'day').startOf('day');
         const endTomorrow = now.clone().add(1, 'day').endOf('day');
 
-        let shifts = { today: [], tomorrow: [] };
+        const shifts = { today: [], tomorrow: [] };
 
-        for (let k in events) {
-            const ev = events[k];
-            if (ev.type !== 'VEVENT') continue;
+        Object.values(events).forEach(ev => {
+            if (ev.type !== 'VEVENT') return;
+            if (!ev.start || !ev.end) return;
 
-            const processEvent = (date) => {
-                const eventStart = moment(date).tz("America/New_York");
-                const durationMillis = new Date(ev.end) - new Date(ev.start);
-                const eventEnd = eventStart.clone().add(durationMillis, 'milliseconds');
+            /**
+             * IMPORTANT:
+             * node-ical already expands recurring events
+             * ev.start / ev.end are correct per instance
+             * DO NOT re-apply timezone here
+             */
+            const eventStart = moment(ev.start);
+            const eventEnd = moment(ev.end);
 
-                return {
-                    name: ev.summary,
-                    timeRange: `${eventStart.format('h:mm A')} - ${eventEnd.format('h:mm A')}`,
-                    sortTime: eventStart.unix()
-                };
+            const shift = {
+                name: ev.summary || "Unnamed Shift",
+                timeRange: `${eventStart.format('h:mm A')} - ${eventEnd.format('h:mm A')}`,
+                sortTime: eventStart.unix()
             };
 
-            // Handle Recurring and Single Events
-            if (ev.rrule) {
-                const todayDates = ev.rrule.between(startToday.toDate(), endToday.toDate());
-                const tomorrowDates = ev.rrule.between(startTomorrow.toDate(), endTomorrow.toDate());
-
-                if (todayDates.length > 0) shifts.today.push(processEvent(todayDates[0]));
-                if (tomorrowDates.length > 0) shifts.tomorrow.push(processEvent(tomorrowDates[0]));
-            } else {
-                const simpleStart = moment(ev.start);
-                if (simpleStart.isBetween(startToday, endToday)) {
-                    shifts.today.push(processEvent(ev.start));
-                } else if (simpleStart.isBetween(startTomorrow, endTomorrow)) {
-                    shifts.tomorrow.push(processEvent(ev.start));
-                }
+            if (eventStart.isBetween(startToday, endToday, null, '[]')) {
+                shifts.today.push(shift);
+            } else if (eventStart.isBetween(startTomorrow, endTomorrow, null, '[]')) {
+                shifts.tomorrow.push(shift);
             }
-        }
+        });
 
-        // Sort both arrays
+        // Sort shifts chronologically
         shifts.today.sort((a, b) => a.sortTime - b.sortTime);
         shifts.tomorrow.sort((a, b) => a.sortTime - b.sortTime);
 
         res.json(shifts);
+
     } catch (error) {
-        console.error("Calendar Error:", error.message);
+        console.error("Calendar Error:", error);
         res.status(500).json({ error: "Failed to fetch shifts" });
     }
 });
+
 
 // --- ROUTE 3: Get Tickets (Real Python Bridge) ---
 app.get('/api/tickets', (req, res) => {
