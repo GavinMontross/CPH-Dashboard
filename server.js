@@ -52,14 +52,14 @@ app.get('/api/shifts', async (req, res) => {
 
         // Helper to process a specific date instance
         const processInstance = (ev, date) => {
-            let start = moment(date).tz("America/New_York");
-            
-            // Handle "Floating" vs "UTC" events fix
-            if (start.hour() < 6) {
-                const rawTime = moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
-                start = moment.tz(rawTime, "America/New_York");
-            }
+            // UPDATED FIX: Force "Face Value" Time
+            // The library often returns recurring dates as UTC (e.g., 13:30 Z)
+            // instead of Local (13:30 EST). If we just convert TZ, it subtracts 5 hours (becoming 08:30).
+            // We grab the raw UTC digits ("2026-01-12 13:30:00") and force them to be NY time.
+            const rawTime = moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
+            const start = moment.tz(rawTime, "America/New_York");
 
+            // Calculate end time based on original duration
             const duration = new Date(ev.end) - new Date(ev.start);
             const end = start.clone().add(duration, 'milliseconds');
 
@@ -83,7 +83,7 @@ app.get('/api/shifts', async (req, res) => {
                 const tomorrowInstances = ev.rrule.between(startTomorrow.toDate(), endTomorrow.toDate());
                 tomorrowInstances.forEach(date => shifts.tomorrow.push(processInstance(ev, date)));
             } else {
-                // Single Events
+                // Single Events - These usually parse correctly with standard TZ conversion
                 const start = moment(ev.start);
                 if (start.isBetween(startToday, endToday)) {
                     shifts.today.push(processInstance(ev, ev.start));
@@ -107,7 +107,7 @@ app.get('/api/shifts', async (req, res) => {
 
 // --- ROUTE 3: Get Tickets (Real Python Bridge) ---
 app.get('/api/tickets', (req, res) => {
-    // UPDATED: Now uses the correct VENV path just like Route 1
+    // Uses the VENV Python
     const pythonProcess = spawn(path.join(__dirname, '.venv/bin/python3'), [
         path.join(__dirname, 'python', 'tickets_bridge.py')
     ]);
