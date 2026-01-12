@@ -17,6 +17,7 @@ app.get('/api/search', (req, res) => {
     const serialNumber = req.query.serial;
     if (!serialNumber) return res.status(400).json({ error: "Serial required" });
 
+    // Uses the VENV Python
     const pythonProcess = spawn(path.join(__dirname, '.venv/bin/python3'), [
         path.join(__dirname, 'python', 'search_bridge.py'),
         serialNumber
@@ -35,7 +36,7 @@ app.get('/api/search', (req, res) => {
     });
 });
 
-// --- ROUTE 2: Get Today and Tomorrow's Shifts (FIXED) ---
+// --- ROUTE 2: Get Today and Tomorrow's Shifts ---
 app.get('/api/shifts', async (req, res) => {
     try {
         const events = await ical.async.fromURL(CALENDAR_ICS_URL);
@@ -51,19 +52,14 @@ app.get('/api/shifts', async (req, res) => {
 
         // Helper to process a specific date instance
         const processInstance = (ev, date) => {
-            // 1. Convert to NY Time
             let start = moment(date).tz("America/New_York");
             
-            // 2. SMART FIX: Handle "Floating" vs "UTC" events
-            // If the conversion pushes the time to a crazy hour (like 4 AM),
-            // it means the event was already Local but treated as UTC.
-            // We revert it by forcing the raw UTC digits to be interpreted as NY time.
+            // Handle "Floating" vs "UTC" events fix
             if (start.hour() < 6) {
                 const rawTime = moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
                 start = moment.tz(rawTime, "America/New_York");
             }
 
-            // Calculate end time based on duration
             const duration = new Date(ev.end) - new Date(ev.start);
             const end = start.clone().add(duration, 'milliseconds');
 
@@ -78,22 +74,16 @@ app.get('/api/shifts', async (req, res) => {
             const ev = events[k];
             if (ev.type !== 'VEVENT') continue;
 
-            // --- A. Handle Recurring Events (Gavin) ---
             if (ev.rrule) {
-                // Get instances for Today
+                // Today
                 const todayInstances = ev.rrule.between(startToday.toDate(), endToday.toDate());
-                todayInstances.forEach(date => {
-                    shifts.today.push(processInstance(ev, date));
-                });
+                todayInstances.forEach(date => shifts.today.push(processInstance(ev, date)));
 
-                // Get instances for Tomorrow
+                // Tomorrow
                 const tomorrowInstances = ev.rrule.between(startTomorrow.toDate(), endTomorrow.toDate());
-                tomorrowInstances.forEach(date => {
-                    shifts.tomorrow.push(processInstance(ev, date));
-                });
-            } 
-            // --- B. Handle Single Events (Mariam) ---
-            else {
+                tomorrowInstances.forEach(date => shifts.tomorrow.push(processInstance(ev, date)));
+            } else {
+                // Single Events
                 const start = moment(ev.start);
                 if (start.isBetween(startToday, endToday)) {
                     shifts.today.push(processInstance(ev, ev.start));
@@ -117,7 +107,8 @@ app.get('/api/shifts', async (req, res) => {
 
 // --- ROUTE 3: Get Tickets (Real Python Bridge) ---
 app.get('/api/tickets', (req, res) => {
-    const pythonProcess = spawn('python', [
+    // UPDATED: Now uses the correct VENV path just like Route 1
+    const pythonProcess = spawn(path.join(__dirname, '.venv/bin/python3'), [
         path.join(__dirname, 'python', 'tickets_bridge.py')
     ]);
 
