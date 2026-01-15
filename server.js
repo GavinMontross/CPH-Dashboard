@@ -50,16 +50,27 @@ app.get('/api/shifts', async (req, res) => {
 
         const shifts = { today: [], tomorrow: [] };
 
-        // Helper to process a specific date instance
-        const processInstance = (ev, date) => {
-            // UPDATED FIX: Force "Face Value" Time
-            // The library often returns recurring dates as UTC (e.g., 13:30 Z)
-            // instead of Local (13:30 EST). If we just convert TZ, it subtracts 5 hours (becoming 08:30).
-            // We grab the raw UTC digits ("2026-01-12 13:30:00") and force them to be NY time.
+        // Helper 1: For Recurring Events (The "Hack" is required here)
+        const processRecurring = (ev, date) => {
+            // Force "Face Value" Time (Fixes RRULE timezone stripping)
             const rawTime = moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
             const start = moment.tz(rawTime, "America/New_York");
 
-            // Calculate end time based on original duration
+            const duration = new Date(ev.end) - new Date(ev.start);
+            const end = start.clone().add(duration, 'milliseconds');
+
+            return {
+                name: ev.summary || "Unnamed Shift",
+                timeRange: `${start.format('h:mm A')} - ${end.format('h:mm A')}`,
+                sortTime: start.unix()
+            };
+        };
+
+        // Helper 2: For Single Events (Standard TZ parsing works here)
+        const processSingle = (ev, date) => {
+            // Standard Timezone Conversion (Trusts the ICS file)
+            const start = moment(date).tz("America/New_York");
+            
             const duration = new Date(ev.end) - new Date(ev.start);
             const end = start.clone().add(duration, 'milliseconds');
 
@@ -75,20 +86,19 @@ app.get('/api/shifts', async (req, res) => {
             if (ev.type !== 'VEVENT') continue;
 
             if (ev.rrule) {
-                // Today
+                // RECURRING: Use "processRecurring" (The Hack)
                 const todayInstances = ev.rrule.between(startToday.toDate(), endToday.toDate());
-                todayInstances.forEach(date => shifts.today.push(processInstance(ev, date)));
+                todayInstances.forEach(date => shifts.today.push(processRecurring(ev, date)));
 
-                // Tomorrow
                 const tomorrowInstances = ev.rrule.between(startTomorrow.toDate(), endTomorrow.toDate());
-                tomorrowInstances.forEach(date => shifts.tomorrow.push(processInstance(ev, date)));
+                tomorrowInstances.forEach(date => shifts.tomorrow.push(processRecurring(ev, date)));
             } else {
-                // Single Events - These usually parse correctly with standard TZ conversion
+                // SINGLE: Use "processSingle" (Standard Logic)
                 const start = moment(ev.start);
                 if (start.isBetween(startToday, endToday)) {
-                    shifts.today.push(processInstance(ev, ev.start));
+                    shifts.today.push(processSingle(ev, ev.start));
                 } else if (start.isBetween(startTomorrow, endTomorrow)) {
-                    shifts.tomorrow.push(processInstance(ev, ev.start));
+                    shifts.tomorrow.push(processSingle(ev, ev.start));
                 }
             }
         }
