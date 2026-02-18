@@ -52,8 +52,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -64,7 +71,8 @@
 
         <div class="mb-8 text-center bg-templeDark rounded-xl py-6 border border-gray-800 shadow-md">
             <div id="clock" class="text-7xl font-bold text-white tracking-wider">00:00</div>
-            <div id="date" class="text-2xl text-templeCherryBright font-bold mt-2 uppercase tracking-widest">Loading...</div>
+            <div id="date" class="text-2xl text-templeCherryBright font-bold mt-2 uppercase tracking-widest">Loading...
+            </div>
         </div>
 
         <div class="flex-grow flex flex-col min-h-0">
@@ -79,12 +87,14 @@
     </div>
 
     <div class="w-[65%] h-full bg-templeDark p-8 flex flex-col">
-        <h1 class="text-3xl font-black text-white border-b-4 border-gray-700 pb-3 mb-6 flex justify-between items-center uppercase italic">
+        <h1
+            class="text-3xl font-black text-white border-b-4 border-gray-700 pb-3 mb-6 flex justify-between items-center uppercase italic">
             <span>
                 Ticket Queue
                 <span id="page-indicator" class="ml-4 text-lg text-gray-500 font-mono font-normal normal-case"></span>
             </span>
-            <span class="text-sm font-bold text-templeDark bg-gray-400 px-3 py-1 rounded flex items-baseline leading-tight not-italic">
+            <span
+                class="text-sm font-bold text-templeDark bg-gray-400 px-3 py-1 rounded flex items-baseline leading-tight not-italic">
                 <span class="mr-1.5">REFRESH IN:</span>
                 <span id="refresh-timer" class="font-mono tabular-nums w-6 text-center">60</span>
                 <span class="ml-0.5">S</span>
@@ -102,12 +112,13 @@
         let currentTicketPage = 0;
         const TICKETS_PER_PAGE = 8;
         let ticketCycleInterval = null;
-        
+
         let allShiftsData = { today: [], tomorrow: [] };
-        let currentStaffView = 'today'; 
+        let currentStaffView = 'today';
         let staffCycleInterval = null;
-        
+
         let refreshCountdown = 60;
+        let countdownInterval = null;
 
         // --- 1. CLOCK LOGIC ---
         function updateClock() {
@@ -119,17 +130,30 @@
 
         // --- REFRESH TIMER UI ---
         function startRefreshTimer() {
-            setInterval(() => {
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            countdownInterval = setInterval(() => {
                 refreshCountdown--;
+
+                // Update UI
                 const timerEl = document.getElementById('refresh-timer');
                 if (timerEl) timerEl.innerText = refreshCountdown;
-                if (refreshCountdown <= 0) refreshCountdown = 60;
+
+                // TRIGGER REFRESH WHEN HIT 0
+                if (refreshCountdown <= 0) {
+                    refreshCountdown = 60; // Reset visual timer immediately
+                    fetchData(); // Trigger the actual fetch
+                }
             }, 1000);
         }
 
         // --- 2. DATA FETCHING ---
         async function fetchData() {
             try {
+                // Reset timer visual just in case manual call
+                const timerEl = document.getElementById('refresh-timer');
+                if (timerEl) timerEl.innerText = "60";
+
                 const [shiftsRes, ticketsRes] = await Promise.all([
                     fetch('/api/shifts'),
                     fetch('/api/tickets')
@@ -148,19 +172,16 @@
 
                 if (isFirstLoad) startStaffCycle();
 
-                refreshCountdown = 60;
-
             } catch (error) {
                 console.error("Error loading dashboard data:", error);
             }
         }
 
         // --- 3. STAFF RENDERING ---
-        // Added 'animate' parameter
         function renderStaff(animate = true) {
             const container = document.getElementById('shift-list');
             const title = document.getElementById('staff-view-title');
-            const animationClass = animate ? 'fade-in' : ''; // Only add class if animate is true
+            const animationClass = animate ? 'fade-in' : '';
 
             const shifts = allShiftsData[currentStaffView];
             title.innerText = currentStaffView === 'today' ? "Today's Staff" : "Tomorrow's Staff";
@@ -195,21 +216,19 @@
             staffCycleInterval = setInterval(() => {
                 currentStaffView = (currentStaffView === 'today') ? 'tomorrow' : 'today';
                 renderStaff(true); // Always animate when flipping views
-            }, 10000); 
+            }, 10000);
         }
 
         // --- 4. TICKET LOGIC ---
-        // Added 'animate' parameter
         function handleTicketData(tickets, animate = false) {
             allTicketsData = tickets || [];
-            
+
             const totalPages = Math.ceil(allTicketsData.length / TICKETS_PER_PAGE);
 
             if (currentTicketPage >= totalPages) {
                 currentTicketPage = Math.max(0, totalPages - 1);
             }
 
-            // Pass the animate flag to the renderer
             renderTicketPage(animate);
 
             if (!ticketCycleInterval) startTicketCycle();
@@ -218,7 +237,7 @@
         function renderTicketPage(animate = true) {
             const container = document.getElementById('ticket-list');
             const indicator = document.getElementById('page-indicator');
-            const animationClass = animate ? 'fade-in' : ''; // Toggle animation
+            const animationClass = animate ? 'fade-in' : '';
 
             if (allTicketsData.length === 0) {
                 container.innerHTML = `<div class="col-span-full text-gray-500 italic text-xl ${animationClass}">No active tickets found.</div>`;
@@ -277,10 +296,13 @@
 
         // --- INITIALIZATION ---
         setInterval(updateClock, 1000);
-        setInterval(fetchData, 60000); 
+
+        // REMOVED the separate setInterval(fetchData, 60000)
+        // Now we just start the cycle
         updateClock();
-        fetchData();
-        startRefreshTimer();
+        fetchData(); // Initial load
+        startRefreshTimer(); // Start the countdown loop
     </script>
 </body>
+
 </html>

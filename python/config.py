@@ -10,13 +10,14 @@ USERNAME = os.getenv("TDX_USERNAME")
 PASSWORD = os.getenv("TDX_PASSWORD")
 
 # Add the App ID (Required for ticket searches)
-# We cast to int because the API expects an integer, but handle missing env var safely
 try:
-    APP_ID = int(os.getenv("TDX_APP_ID"))
-except (TypeError, ValueError):
-    # This will cause the script to crash later if not fixed, but prevents immediate import error
+    # Handle case where env var is missing or empty string
+    app_id_str = os.getenv("TDX_APP_ID", "")
+    APP_ID = int(app_id_str) if app_id_str else None
+except ValueError:
     APP_ID = None
 
+# If any credential is missing, we must fail
 if not all([BASE_URL, USERNAME, PASSWORD, APP_ID]):
     raise ValueError(
         "Missing credentials! Check your .env file for BASE_URL, USERNAME, PASSWORD, and TDX_APP_ID."
