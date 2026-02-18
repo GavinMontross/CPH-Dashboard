@@ -15,18 +15,20 @@ ALL_UIDS = [
     "1acfd965-cf45-f011-9fa5-9c0eadb6129c",
 ]
 
+CPH_GROUP_ID = 3974
+
 
 def main():
     try:
         client = TDXClient()
-        # NOTE: Ticket searches often require the App ID in the URL for full filtering
         url = f"{client.base_url}/api/{config.APP_ID}/tickets/search"
         headers = client.get_headers()
 
+        # ---------------------------------------------------------
+        # 1. FETCH TEAM TICKETS (For Display Cards)
+        # ---------------------------------------------------------
         all_found_tickets = []
 
-        # ---------------------------------------------------------
-        # Uses TicketSearch.ResponsibilityUids (Guid[])
         payload_team = {
             "MaxResults": 500,
             "ResponsibilityUids": ALL_UIDS,
@@ -36,44 +38,48 @@ def main():
         try:
             resp_team = requests.post(url, headers=headers, json=payload_team)
             resp_team.raise_for_status()
-            team_tickets = resp_team.json()
-            all_found_tickets.extend(team_tickets)
+            all_found_tickets = resp_team.json()
         except Exception as e:
             sys.stderr.write(f"Warning: Team-ticket search failed: {e}\n")
 
         # ---------------------------------------------------------
-        # PROCESS & FORMAT
+        # 2. FETCH GROUP TOTAL (For Header Metric)
+        # ---------------------------------------------------------
+        group_total_count = 0
+        try:
+            payload_group = {
+                "MaxResults": 1000,  # Fetch enough to get a realistic count
+                "ResponsibleGroupId": [CPH_GROUP_ID],
+                "IsActive": True,
+            }
+            resp_group = requests.post(url, headers=headers, json=payload_group)
+            resp_group.raise_for_status()
+            group_tickets = resp_group.json()
+            group_total_count = len(group_tickets)
+        except Exception as e:
+            sys.stderr.write(f"Warning: Group count search failed: {e}\n")
+
+        # ---------------------------------------------------------
+        # PROCESS & FORMAT CARDS
         # ---------------------------------------------------------
         dashboard_tickets = []
         seen_ids = set()
-
         ignored_statuses = ["Resolved", "Closed", "Cancelled"]
 
         for t in all_found_tickets:
             ticket_id = t.get("ID")
             status_name = t.get("StatusName")
 
-            # 1. Filter out Resolved/Closed/Cancelled
             if status_name in ignored_statuses:
                 continue
-
-            # 2. Deduplicate
             if ticket_id in seen_ids:
                 continue
             seen_ids.add(ticket_id)
 
-            # 3. Determine Display Owner
             r_name = t.get("ResponsibleFullName")
             r_group_name = t.get("ResponsibleGroupName")
+            display_owner = r_name if r_name else (r_group_name or "Unassigned")
 
-            if r_name:
-                display_owner = r_name
-            elif r_group_name:
-                display_owner = r_group_name
-            else:
-                display_owner = "Unassigned"
-
-            # 4. Get Requestor Name
             requestor_name = t.get("RequestorName") or "Unknown"
 
             dashboard_tickets.append(
@@ -86,11 +92,13 @@ def main():
                 }
             )
 
-        # Output Final JSON
-        print(json.dumps(dashboard_tickets))
+        # Output Final JSON with both pieces of data
+        output = {"tickets": dashboard_tickets, "groupCount": group_total_count}
+        print(json.dumps(output))
 
     except Exception as e:
-        print(json.dumps([]))
+        # Return safe default on crash
+        print(json.dumps({"tickets": [], "groupCount": 0}))
         sys.stderr.write(f"CRITICAL ERROR: {str(e)}\n")
 
 

@@ -11,13 +11,13 @@
             theme: {
                 extend: {
                     colors: {
-                        templeDark: '#101010',      // Deep black background
-                        templePanel: '#1a1a1a',     // Slightly lighter panel
-                        templeCard: '#262626',      // Card background
-                        templeCherry: '#9D2235',    // OFFICIAL TEMPLE CHERRY
-                        templeCherryBright: '#C52844', // Brighter cherry for text readability
-                        statusNew: '#FFD700',       // Gold (Temple Accent) for New Tickets
-                        statusActive: '#00ced1'     // Dark Turquoise for Active
+                        templeDark: '#101010',
+                        templePanel: '#1a1a1a',
+                        templeCard: '#262626',
+                        templeCherry: '#9D2235',
+                        templeCherryBright: '#C52844',
+                        statusNew: '#FFD700',
+                        statusActive: '#00ced1'
                     }
                 }
             }
@@ -28,7 +28,6 @@
             font-family: 'Roboto', 'Segoe UI', sans-serif;
         }
 
-        /* Custom Scrollbar for clean look */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -46,7 +45,6 @@
             background: #555;
         }
 
-        /* Fade animation for page transitions */
         .fade-in {
             animation: fadeIn 0.8s ease-in-out;
         }
@@ -68,7 +66,6 @@
 <body class="bg-templeDark text-gray-200 h-screen w-screen overflow-hidden flex">
 
     <div class="w-[35%] h-full bg-templePanel border-r-2 border-templeCherry flex flex-col p-6">
-
         <div class="mb-8 text-center bg-templeDark rounded-xl py-6 border border-gray-800 shadow-md">
             <div id="clock" class="text-7xl font-bold text-white tracking-wider">00:00</div>
             <div id="date" class="text-2xl text-templeCherryBright font-bold mt-2 uppercase tracking-widest">Loading...
@@ -79,7 +76,6 @@
             <h1 class="text-3xl font-black text-white border-b-4 border-templeCherry pb-3 mb-6 uppercase italic">
                 <span id="staff-view-title">Today's Staff</span>
             </h1>
-
             <div id="shift-list" class="flex-grow overflow-y-auto space-y-4 pr-2">
                 <div class="text-gray-500 italic text-xl p-4">Loading schedule...</div>
             </div>
@@ -89,10 +85,15 @@
     <div class="w-[65%] h-full bg-templeDark p-8 flex flex-col">
         <h1
             class="text-3xl font-black text-white border-b-4 border-gray-700 pb-3 mb-6 flex justify-between items-center uppercase italic">
-            <span>
-                Ticket Queue
-                <span id="page-indicator" class="ml-4 text-lg text-gray-500 font-mono font-normal normal-case"></span>
-            </span>
+            <div class="flex items-center gap-4">
+                <span>Ticket Queue</span>
+                <span id="group-count-badge"
+                    class="hidden text-lg not-italic font-bold bg-templeCherry px-3 py-1 rounded text-white tracking-wide">
+                    GROUP OPEN: <span id="group-count-val">0</span>
+                </span>
+                <span id="page-indicator" class="text-lg text-gray-500 font-mono font-normal normal-case"></span>
+            </div>
+
             <span
                 class="text-sm font-bold text-templeDark bg-gray-400 px-3 py-1 rounded flex items-baseline leading-tight not-italic">
                 <span class="mr-1.5">REFRESH IN:</span>
@@ -131,18 +132,13 @@
         // --- REFRESH TIMER UI ---
         function startRefreshTimer() {
             if (countdownInterval) clearInterval(countdownInterval);
-
             countdownInterval = setInterval(() => {
                 refreshCountdown--;
-
-                // Update UI
                 const timerEl = document.getElementById('refresh-timer');
                 if (timerEl) timerEl.innerText = refreshCountdown;
-
-                // TRIGGER REFRESH WHEN HIT 0
                 if (refreshCountdown <= 0) {
-                    refreshCountdown = 60; // Reset visual timer immediately
-                    fetchData(); // Trigger the actual fetch
+                    refreshCountdown = 60;
+                    fetchData();
                 }
             }, 1000);
         }
@@ -150,7 +146,6 @@
         // --- 2. DATA FETCHING ---
         async function fetchData() {
             try {
-                // Reset timer visual just in case manual call
                 const timerEl = document.getElementById('refresh-timer');
                 if (timerEl) timerEl.innerText = "60";
 
@@ -162,11 +157,31 @@
                 if (!shiftsRes.ok || !ticketsRes.ok) throw new Error("API call failed");
 
                 allShiftsData = await shiftsRes.json();
-                const tickets = await ticketsRes.json();
+                const ticketData = await ticketsRes.json();
 
-                // TRUE = Animate (First load), FALSE = Silent Update (Subsequent refreshes)
+                // HANDLE NEW DATA STRUCTURE
+                // It might be { tickets: [], groupCount: 0 } OR just [] (fallback)
+                let tickets = [];
+                let groupCount = 0;
+
+                if (Array.isArray(ticketData)) {
+                    tickets = ticketData;
+                } else {
+                    tickets = ticketData.tickets || [];
+                    groupCount = ticketData.groupCount || 0;
+                }
+
+                // Update Group Count UI
+                const badge = document.getElementById('group-count-badge');
+                const val = document.getElementById('group-count-val');
+                if (groupCount > 0) {
+                    badge.classList.remove('hidden');
+                    val.innerText = groupCount;
+                } else {
+                    badge.classList.add('hidden');
+                }
+
                 const isFirstLoad = !staffCycleInterval;
-
                 renderStaff(isFirstLoad);
                 handleTicketData(tickets, isFirstLoad);
 
@@ -215,7 +230,7 @@
         function startStaffCycle() {
             staffCycleInterval = setInterval(() => {
                 currentStaffView = (currentStaffView === 'today') ? 'tomorrow' : 'today';
-                renderStaff(true); // Always animate when flipping views
+                renderStaff(true);
             }, 10000);
         }
 
@@ -224,13 +239,10 @@
             allTicketsData = tickets || [];
 
             const totalPages = Math.ceil(allTicketsData.length / TICKETS_PER_PAGE);
-
             if (currentTicketPage >= totalPages) {
                 currentTicketPage = Math.max(0, totalPages - 1);
             }
-
             renderTicketPage(animate);
-
             if (!ticketCycleInterval) startTicketCycle();
         }
 
@@ -250,11 +262,7 @@
             const ticketsToShow = allTicketsData.slice(start, end);
             const totalPages = Math.ceil(allTicketsData.length / TICKETS_PER_PAGE);
 
-            if (totalPages > 1) {
-                indicator.innerText = `(Page ${currentTicketPage + 1} of ${totalPages})`;
-            } else {
-                indicator.innerText = "";
-            }
+            indicator.innerText = totalPages > 1 ? `(Page ${currentTicketPage + 1} of ${totalPages})` : "";
 
             const html = ticketsToShow.map(t => {
                 const isNew = t.status === 'New';
@@ -267,7 +275,7 @@
                         <div class="flex justify-between items-start mb-1">
                             <div class="flex flex-col">
                                 <span class="text-sm font-mono text-gray-500">#${t.id}</span>
-                                <span class="text-sm text-gray-400 truncate w-50" title="${t.requestor}">${t.requestor}</span>
+                                <span class="text-sm text-gray-400 truncate w-52" title="${t.requestor}">${t.requestor}</span>
                             </div>
                             <span class="text-sm font-bold text-white bg-templeCherry px-2 py-1 rounded">${t.assignedTo}</span>
                         </div>
@@ -292,7 +300,7 @@
                 if (totalPages > 1) {
                     currentTicketPage++;
                     if (currentTicketPage >= totalPages) currentTicketPage = 0;
-                    renderTicketPage(true); // Always animate when flipping pages
+                    renderTicketPage(true);
                 }
             }, 10000);
         }
@@ -300,8 +308,8 @@
         // --- INITIALIZATION ---
         setInterval(updateClock, 1000);
         updateClock();
-        fetchData(); // Initial load
-        startRefreshTimer(); // Start the countdown loop
+        fetchData();
+        startRefreshTimer();
     </script>
 </body>
 
