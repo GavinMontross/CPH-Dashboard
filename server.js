@@ -12,31 +12,7 @@ app.use(express.static('public'));
 // --- CONFIGURATION ---
 const CALENDAR_ICS_URL = "https://outlook.office365.com/owa/calendar/559a8ce39ea84986a802986542fad4c8@temple.edu/311df36b86d34d5c9431c24ce70bc14415029843121899045862/calendar.ics";
 
-// --- ROUTE 1: Asset Search (Backend Bridge) ---
-app.get('/api/search', (req, res) => {
-    const serialNumber = req.query.serial;
-    if (!serialNumber) return res.status(400).json({ error: "Serial required" });
-
-    // Uses the VENV Python
-    const pythonProcess = spawn(path.join(__dirname, '.venv/bin/python3'), [
-        path.join(__dirname, 'python', 'search_bridge.py'),
-        serialNumber
-    ]);
-
-    let dataString = '';
-    pythonProcess.stdout.on('data', (data) => dataString += data.toString());
-
-    pythonProcess.on('close', (code) => {
-        if (code !== 0) return res.status(500).json({ error: "Search failed" });
-        try {
-            res.json(JSON.parse(dataString));
-        } catch (e) {
-            res.status(500).json({ error: "Invalid data from scanner" });
-        }
-    });
-});
-
-// --- ROUTE 2: Get Today and Tomorrow's Shifts ---
+// --- ROUTE 1: Get Today and Tomorrow's Shifts ---
 app.get('/api/shifts', async (req, res) => {
     try {
         const events = await ical.async.fromURL(CALENDAR_ICS_URL);
@@ -50,7 +26,7 @@ app.get('/api/shifts', async (req, res) => {
 
         const shifts = { today: [], tomorrow: [] };
 
-        // Helper 1: For Recurring Events (The "Hack" is required here)
+        // Helper 1: For Recurring Events (The "Hack" for Outlook RRule TZs)
         const processRecurring = (ev, date) => {
             // Force "Face Value" Time (Fixes RRULE timezone stripping)
             const rawTime = moment(date).utc().format('YYYY-MM-DD HH:mm:ss');
@@ -70,7 +46,7 @@ app.get('/api/shifts', async (req, res) => {
         const processSingle = (ev, date) => {
             // Standard Timezone Conversion (Trusts the ICS file)
             const start = moment(date).tz("America/New_York");
-            
+
             const duration = new Date(ev.end) - new Date(ev.start);
             const end = start.clone().add(duration, 'milliseconds');
 
@@ -86,14 +62,14 @@ app.get('/api/shifts', async (req, res) => {
             if (ev.type !== 'VEVENT') continue;
 
             if (ev.rrule) {
-                // RECURRING: Use "processRecurring" (The Hack)
+                // RECURRING: Use "processRecurring"
                 const todayInstances = ev.rrule.between(startToday.toDate(), endToday.toDate());
                 todayInstances.forEach(date => shifts.today.push(processRecurring(ev, date)));
 
                 const tomorrowInstances = ev.rrule.between(startTomorrow.toDate(), endTomorrow.toDate());
                 tomorrowInstances.forEach(date => shifts.tomorrow.push(processRecurring(ev, date)));
             } else {
-                // SINGLE: Use "processSingle" (Standard Logic)
+                // SINGLE: Use "processSingle"
                 const start = moment(ev.start);
                 if (start.isBetween(startToday, endToday)) {
                     shifts.today.push(processSingle(ev, ev.start));
@@ -115,36 +91,45 @@ app.get('/api/shifts', async (req, res) => {
     }
 });
 
-// --- ROUTE 3: Get Tickets (Real Python Bridge) ---
+// --- ROUTE 2: Get Tickets (Python Bridge) ---
 app.get('/api/tickets', (req, res) => {
-    // Uses the VENV Python
-    const pythonProcess = spawn(path.join(__dirname, '.venv/bin/python3'), [
-        path.join(__dirname, 'python', 'tickets_bridge.py')
-    ]);
+    // Construct path to Python executable and script
+    // Using path.join ensures we don't have slash direction issues
+    const pythonExec = path.join(__dirname, '.venv', 'bin', 'python3');
+    const scriptPath = path.join(__dirname, 'python', 'tickets_bridge.py');
+
+    const pythonProcess = spawn(pythonExec, [scriptPath]);
 
     let dataString = '';
 
+    // Collect data from STDOUT
     pythonProcess.stdout.on('data', (data) => {
         dataString += data.toString();
     });
 
+    // Log errors from STDERR (Non-blocking)
     pythonProcess.stderr.on('data', (data) => {
-        console.error(`[Python Ticket Error]: ${data}`);
+        console.error(`[Python Ticket Log]: ${data}`);
     });
 
     pythonProcess.on('close', (code) => {
         if (code !== 0) {
             console.error("Ticket script failed with code", code);
+            // Return empty array on crash so dashboard doesn't break
             return res.json([]);
         }
+
         try {
+            // Attempt to parse the output.
+            // If python printed "CRITICAL: Login failed" to stdout, this will fail safely.
             const tickets = JSON.parse(dataString);
             res.json(tickets);
         } catch (e) {
-            console.error("Failed to parse ticket JSON");
+            console.error("Failed to parse ticket JSON. Output was:", dataString);
             res.json([]);
         }
     });
 });
 
-app.listen(3000, () => console.log('Dashboard running at http://localhost:3000'));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Dashboard running at http://localhost:${PORT}`));
