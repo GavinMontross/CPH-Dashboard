@@ -17,6 +17,10 @@ ALL_UIDS = [
 
 CPH_GROUP_ID = 3974
 
+# STANDARD TDX STATUS CLASSES
+# 1 = New, 2 = In Process, 5 = On Hold
+ACTIVE_STATUS_CLASSES = [1, 2, 5]
+
 
 def main():
     try:
@@ -28,11 +32,12 @@ def main():
         # 1. FETCH TEAM TICKETS (For Display Cards)
         # ---------------------------------------------------------
         all_found_tickets = []
-
+        
+        # UPDATED: Use StatusClassIDs instead of IsActive
         payload_team = {
-            "MaxResults": 500,
+            "MaxResults": 500, 
             "ResponsibilityUids": ALL_UIDS,
-            "IsActive": True,
+            "StatusClassIDs": ACTIVE_STATUS_CLASSES
         }
 
         try:
@@ -47,15 +52,29 @@ def main():
         # ---------------------------------------------------------
         group_total_count = 0
         try:
+            # UPDATED: Use StatusClassIDs instead of IsActive
+            # Also removed "IsOnHold" filter since we are handling that via Class 5
             payload_group = {
-                "MaxResults": 1000,  # Fetch enough to get a realistic count
-                "ResponsibleGroupId": [CPH_GROUP_ID],
-                "IsActive": True,
+                "MaxResults": 5000, 
+                "ResponsibilityGroupIDs": [CPH_GROUP_ID],
+                "StatusClassIDs": ACTIVE_STATUS_CLASSES
             }
             resp_group = requests.post(url, headers=headers, json=payload_group)
             resp_group.raise_for_status()
             group_tickets = resp_group.json()
-            group_total_count = len(group_tickets)
+
+            # "Scheduled" is usually not in Classes 1/2/5, but just in case:
+            ignored_status_names = ["Scheduled"]
+            
+            actionable_tickets = [
+                t for t in group_tickets 
+                if t.get("StatusName") not in ignored_status_names
+            ]
+            
+            group_total_count = len(actionable_tickets)
+            
+            sys.stderr.write(f"DEBUG: Group Search returned {len(group_tickets)} tickets (Classes {ACTIVE_STATUS_CLASSES}).\n")
+
         except Exception as e:
             sys.stderr.write(f"Warning: Group count search failed: {e}\n")
 
@@ -64,40 +83,38 @@ def main():
         # ---------------------------------------------------------
         dashboard_tickets = []
         seen_ids = set()
+        # Double check safety filter
         ignored_statuses = ["Resolved", "Closed", "Cancelled"]
 
         for t in all_found_tickets:
             ticket_id = t.get("ID")
             status_name = t.get("StatusName")
 
-            if status_name in ignored_statuses:
-                continue
-            if ticket_id in seen_ids:
-                continue
+            if status_name in ignored_statuses: continue
+            if ticket_id in seen_ids: continue
             seen_ids.add(ticket_id)
 
             r_name = t.get("ResponsibleFullName")
             r_group_name = t.get("ResponsibleGroupName")
             display_owner = r_name if r_name else (r_group_name or "Unassigned")
-
+            
             requestor_name = t.get("RequestorName") or "Unknown"
 
-            dashboard_tickets.append(
-                {
-                    "id": ticket_id,
-                    "title": t.get("Title"),
-                    "assignedTo": display_owner,
-                    "status": status_name,
-                    "requestor": requestor_name,
-                }
-            )
+            dashboard_tickets.append({
+                "id": ticket_id,
+                "title": t.get("Title"),
+                "assignedTo": display_owner,
+                "status": status_name,
+                "requestor": requestor_name
+            })
 
-        # Output Final JSON with both pieces of data
-        output = {"tickets": dashboard_tickets, "groupCount": group_total_count}
+        output = {
+            "tickets": dashboard_tickets,
+            "groupCount": group_total_count
+        }
         print(json.dumps(output))
 
     except Exception as e:
-        # Return safe default on crash
         print(json.dumps({"tickets": [], "groupCount": 0}))
         sys.stderr.write(f"CRITICAL ERROR: {str(e)}\n")
 
