@@ -83,19 +83,20 @@
     </div>
 
     <div class="w-[65%] h-full bg-templeDark p-8 flex flex-col">
-        <h1
-            class="text-3xl font-black text-white border-b-4 border-gray-700 pb-3 mb-6 flex justify-between items-center uppercase italic">
-            <div class="flex items-center gap-4">
+        <h1 class="relative text-3xl font-black text-white border-b-4 border-gray-700 pb-3 mb-6 flex justify-between items-center uppercase italic">
+            
+            <div class="flex items-center gap-4 z-10">
                 <span>Ticket Queue</span>
-                <span id="group-count-badge"
-                    class="hidden text-lg not-italic font-bold bg-templeCherry px-3 py-1 rounded text-white tracking-wide">
-                    Total in Queue: <span id="group-count-val">0</span>
-                </span>
                 <span id="page-indicator" class="text-lg text-gray-500 font-mono font-normal normal-case"></span>
             </div>
 
-            <span
-                class="text-sm font-bold text-templeDark bg-gray-400 px-3 py-1 rounded flex items-baseline leading-tight not-italic">
+            <div id="group-count-badge" 
+                 class="hidden absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-[60%] flex items-center gap-3 bg-templePanel border-2 border-templeCherry px-6 py-1.5 rounded-full shadow-lg shadow-black/50 transition-all duration-500 z-0">
+                <span class="text-sm font-bold text-gray-400 not-italic tracking-widest">GROUP OPEN</span>
+                <span id="group-count-val" class="text-3xl font-bold text-white not-italic font-mono leading-none drop-shadow-md">0</span>
+            </div>
+
+            <span class="z-10 text-sm font-bold text-templeDark bg-gray-400 px-3 py-1 rounded flex items-baseline leading-tight not-italic">
                 <span class="mr-1.5">REFRESH IN:</span>
                 <span id="refresh-timer" class="font-mono tabular-nums w-6 text-center">60</span>
                 <span class="ml-0.5">S</span>
@@ -160,7 +161,6 @@
                 const ticketData = await ticketsRes.json();
 
                 // HANDLE NEW DATA STRUCTURE
-                // It might be { tickets: [], groupCount: 0 } OR just [] (fallback)
                 let tickets = [];
                 let groupCount = 0;
 
@@ -174,7 +174,9 @@
                 // Update Group Count UI
                 const badge = document.getElementById('group-count-badge');
                 const val = document.getElementById('group-count-val');
+                
                 if (groupCount > 0) {
+                    // Removing 'hidden' allows the 'flex' in the HTML class to take effect
                     badge.classList.remove('hidden');
                     val.innerText = groupCount;
                 } else {
