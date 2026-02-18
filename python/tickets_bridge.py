@@ -19,6 +19,7 @@ ALL_UIDS = [
 def main():
     try:
         client = TDXClient()
+        # NOTE: Ticket searches often require the App ID in the URL for full filtering
         url = f"{client.base_url}/api/{config.APP_ID}/tickets/search"
         headers = client.get_headers()
 
@@ -72,12 +73,16 @@ def main():
             else:
                 display_owner = "Unassigned"
 
+            # 4. Get Requestor Name
+            requestor_name = t.get("RequestorName") or "Unknown"
+
             dashboard_tickets.append(
                 {
                     "id": ticket_id,
                     "title": t.get("Title"),
                     "assignedTo": display_owner,
                     "status": status_name,
+                    "requestor": requestor_name,
                 }
             )
 
