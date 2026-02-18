@@ -26,7 +26,7 @@ def main():
 
         # ---------------------------------------------------------
         # Uses TicketSearch.ResponsibilityUids (Guid[])
-        payload_team = {"MaxResults": 500, "ResponsibilityUids": ALL_UIDS}
+        payload_team = {"MaxResults": 500, "ResponsibilityUids": ALL_UIDS, "IsActive": True}
 
         try:
             resp_team = requests.post(url, headers=headers, json=payload_team)
