@@ -1,0 +1,290 @@
+[11:02:56] [ServerMain/INFO]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, profilesHost=https://api.mojang.com, name=PROD]
+[11:02:57] [ServerMain/INFO]: No existing world data, creating new world
+[11:02:58] [ServerMain/INFO]: Loaded 1470 recipes
+[11:02:58] [ServerMain/INFO]: Loaded 1584 advancements
+[11:02:59] [Server thread/INFO]: Starting minecraft server version 1.21.11
+[11:02:59] [Server thread/INFO]: Loading properties
+[11:02:59] [Server thread/INFO]: Default game type: SURVIVAL
+[11:02:59] [Server thread/INFO]: Generating keypair
+[11:02:59] [Server thread/INFO]: Starting Minecraft server on *:25565
+[11:03:00] [Server thread/INFO]: Preparing level "world"
+[11:03:00] [Server thread/INFO]: Selecting global world spawn...
+[11:03:06] [Server thread/INFO]: Loading 0 persistent chunks...
+[11:03:06] [Server thread/INFO]: Preparing spawn area: 100%
+[11:03:06] [Server thread/INFO]: Time elapsed: 6092 ms
+[11:03:06] [Server thread/INFO]: Done (6.473s)! For help, type "help"
+[11:04:06] [Server thread/INFO]: Server empty for 60 seconds, pausing
+[11:14:14] [User Authenticator #1/INFO]: UUID of player GSM329 is c0c5e252-1eee-47a9-932e-bf2e7c15bcdb
+[11:14:20] [Server thread/INFO]: GSM329[/10.108.26.221:52787] logged in with entity id 33 at (0.5, 75.0, 3.5)
+[11:14:20] [Server thread/INFO]: GSM329 joined the game
+[11:16:06] [Server thread/INFO]: GSM329 lost connection: Disconnected
+[11:16:06] [Server thread/INFO]: GSM329 left the game
+[11:17:06] [Server thread/INFO]: Server empty for 60 seconds, pausing
+[11:20:20] [User Authenticator #2/INFO]: UUID of player LoveMinekwaft is 626999dc-a0f2-467e-bc15-42f8291560b4
+[11:20:21] [Server thread/INFO]: LoveMinekwaft[/10.108.35.164:50592] logged in with entity id 1099 at (7.5, 79.0, -7.5)
+[11:20:21] [Server thread/INFO]: LoveMinekwaft joined the game
+[11:22:48] [Worker-Main-7/ERROR]: Failed to fetch mob spawner entity at (-131, 32, 300)
+[11:22:50] [Server thread/INFO]: LoveMinekwaft has made the advancement [A Seedy Place]
+[11:23:27] [User Authenticator #3/INFO]: UUID of player GSM329 is c0c5e252-1eee-47a9-932e-bf2e7c15bcdb
+[11:23:28] [Server thread/INFO]: GSM329[/10.108.26.221:58191] logged in with entity id 2295 at (-50.01357497139948, 64.0, 29.247258593400623)
+[11:23:28] [Server thread/INFO]: GSM329 joined the game
+[11:23:50] [User Authenticator #4/INFO]: UUID of player mariamk690 is 4df1f153-e4f8-437f-ab3b-d4060378a06e
+[11:23:51] [Server thread/INFO]: mariamk690[/10.108.38.152:13679] logged in with entity id 2626 at (9.5, 79.0, -3.5)
+[11:23:51] [Server thread/INFO]: mariamk690 joined the game
+[11:24:51] [Server thread/INFO]: LoveMinekwaft has made the advancement [Stone Age]
+[11:25:30] [Server thread/INFO]: LoveMinekwaft has made the advancement [Getting an Upgrade]
+[11:26:06] [Server thread/INFO]: LoveMinekwaft has made the advancement [Acquire Hardware]
+[11:27:13] [Server thread/INFO]: GSM329 has made the advancement [Stone Age]
+[11:27:22] [Server thread/INFO]: GSM329 has made the advancement [Getting an Upgrade]
+[11:27:34] [Server thread/INFO]: LoveMinekwaft has made the advancement [Monster Hunter]
+[11:29:56] [Server thread/INFO]: mariamk690 was slain by Zombie
+[11:31:21] [Server thread/INFO]: GSM329 has made the advancement [Monster Hunter]
+[11:32:12] [Server thread/INFO]: Villager dcx['Leatherworker'/1197, l='ServerLevel[world]', x=82.70, y=71.42, z=71.51] died, message: 'Leatherworker was slain by Zombie'
+[11:32:37] [Server thread/INFO]: Villager dcx['Shepherd'/1284, l='ServerLevel[world]', x=73.69, y=85.50, z=58.65] died, message: 'Shepherd was slain by Husk'
+[11:32:41] [Server thread/INFO]: Villager dcx['Farmer'/1193, l='ServerLevel[world]', x=84.01, y=74.00, z=79.31] died, message: 'Farmer was slain by Zombie'
+[11:33:42] [Server thread/INFO]: GSM329 has made the advancement [Sweet Dreams]
+[11:33:50] [Server thread/INFO]: LoveMinekwaft has made the advancement [Sweet Dreams]
+[11:34:08] [Server thread/INFO]: mariamk690 has made the advancement [Sweet Dreams]
+[11:36:05] [Server thread/INFO]: LoveMinekwaft has made the advancement [Hot Stuff]
+[11:38:17] [Server thread/INFO]: LoveMinekwaft has made the advancement [We Need to Go Deeper]
+[11:38:22] [Server thread/INFO]: LoveMinekwaft has completed the challenge [Return to Sender]
+[11:38:51] [Server thread/INFO]: mariamk690 has made the advancement [Stone Age]
+[11:39:14] [Server thread/INFO]: mariamk690 has made the advancement [Getting an Upgrade]
+[11:39:50] [Server thread/INFO]: GSM329 has made the advancement [We Need to Go Deeper]
+[11:41:02] [Server thread/INFO]: mariamk690 has made the advancement [We Need to Go Deeper]
+[11:41:24] [Server thread/INFO]: mariamk690 tried to swim in lava
+[11:43:28] [Server thread/INFO]: mariamk690 has made the advancement [Monster Hunter]
+[11:47:43] [User Authenticator #5/INFO]: UUID of player FeelMeLikeABaby is 3ada24c9-6059-4a33-8675-01a1b44e777b
+[11:47:44] [Server thread/INFO]: FeelMeLikeABaby[/10.108.42.81:62434] logged in with entity id 12488 at (-7.5, 72.0, -6.5)
+[11:47:44] [Server thread/INFO]: FeelMeLikeABaby joined the game
+[11:47:52] [Server thread/INFO]: <LoveMinekwaft> ban this guy
+[11:48:53] [Server thread/INFO]: mariamk690 was shot by Skeleton
+[11:49:56] [Server thread/INFO]: LoveMinekwaft has made the advancement [Isn't It Iron Pick]
+[11:50:34] [Server thread/WARN]: Mismatch in destroy block pos: is{x=98, y=50, z=136} is{x=99, y=49, z=136}
+[11:52:59] [Server thread/INFO]: GSM329 fell from a high place
+[11:53:00] [Server thread/INFO]: LoveMinekwaft has made the advancement [Those Were the Days]
+[11:53:07] [Server thread/INFO]: mariamk690 has made the advancement [Best Friends Forever]
+[11:53:57] [Server thread/INFO]: GSM329 fell from a high place
+[11:54:26] [Server thread/INFO]: LoveMinekwaft has made the advancement [War Pigs]
+[11:54:28] [Server thread/INFO]: LoveMinekwaft has made the advancement [Hidden in the Depths]
+[11:54:39] [Server thread/INFO]: GSM329 was doomed to fall by Skeleton
+[11:54:44] [Server thread/INFO]: LoveMinekwaft was slain by Piglin
+[11:55:22] [Server thread/INFO]: GSM329 was blown up by Creeper
+[11:55:31] [Server thread/INFO]: GSM329 lost connection: Disconnected
+[11:55:31] [Server thread/INFO]: GSM329 left the game
+[11:55:54] [User Authenticator #6/INFO]: Disconnecting GSM329 (/10.108.26.221:63511): Authentication servers are down. Please try again later. Sorry!
+[11:55:54] [User Authenticator #6/ERROR]: Couldn't verify username because servers are unavailable
+[11:55:54] [Server thread/INFO]: GSM329 (/10.108.26.221:63511) lost connection: Authentication servers are down. Please try again later. Sorry!
+[11:56:02] [User Authenticator #7/INFO]: UUID of player GSM329 is c0c5e252-1eee-47a9-932e-bf2e7c15bcdb
+[11:56:02] [Server thread/INFO]: GSM329 (/10.108.26.221:63513) lost connection: Disconnected
+[11:56:02] [Server thread/INFO]: FeelMeLikeABaby lost connection: Disconnected
+[11:56:02] [Server thread/INFO]: FeelMeLikeABaby left the game
+[11:56:16] [User Authenticator #8/INFO]: UUID of player GSM329 is c0c5e252-1eee-47a9-932e-bf2e7c15bcdb
+[11:56:16] [Server thread/INFO]: GSM329[/10.108.26.221:63515] logged in with entity id 17254 at (6.699999988079071, 67.0, 40.243833297497375)
+[11:56:16] [Server thread/INFO]: GSM329 joined the game
+[11:56:17] [User Authenticator #9/INFO]: UUID of player FeelMeLikeABaby is 3ada24c9-6059-4a33-8675-01a1b44e777b
+[11:56:18] [Server thread/INFO]: FeelMeLikeABaby[/10.108.42.81:62504] logged in with entity id 17313 at (24.905290378516273, 63.0, 93.52928712819364)
+[11:56:18] [Server thread/INFO]: FeelMeLikeABaby joined the game
+[11:57:54] [Server thread/INFO]: FeelMeLikeABaby has made the advancement [Stone Age]
+[12:01:09] [Server thread/INFO]: mariamk690 was slain by Zombie
+[12:01:28] [Server thread/INFO]: FeelMeLikeABaby has made the advancement [Getting an Upgrade]
+[12:01:43] [Server thread/INFO]: mariamk690 fell from a high place
+[12:02:50] [Server thread/INFO]: mariamk690 was shot by Skeleton
+[12:05:07] [Server thread/INFO]: mariamk690 lost connection: Disconnected
+[12:05:07] [Server thread/INFO]: mariamk690 left the game
+[12:07:38] [Server thread/INFO]: FeelMeLikeABaby has made the advancement [Monster Hunter]
+[12:08:51] [Server thread/INFO]: GSM329 has made the advancement [Acquire Hardware]
+[12:09:03] [Server thread/INFO]: GSM329 has made the advancement [Isn't It Iron Pick]
+[12:09:36] [Server thread/INFO]: GSM329 has made the advancement [Suit Up]
+[12:09:38] [Server thread/INFO]: FeelMeLikeABaby lost connection: Disconnected
+[12:09:38] [Server thread/INFO]: FeelMeLikeABaby left the game
+[12:09:40] [User Authenticator #10/INFO]: UUID of player FeelMeLikeABaby is 3ada24c9-6059-4a33-8675-01a1b44e777b
+[12:09:40] [Server thread/INFO]: FeelMeLikeABaby[/10.108.42.81:62614] logged in with entity id 22147 at (7.385160250738583, 62.0, 96.91577990456366)
+[12:09:40] [Server thread/INFO]: FeelMeLikeABaby joined the game
+[12:09:45] [Server thread/INFO]: LoveMinekwaft lost connection: Disconnected
+[12:09:45] [Server thread/INFO]: LoveMinekwaft left the game
+[12:09:46] [Server thread/INFO]: FeelMeLikeABaby lost connection: Disconnected
+[12:09:46] [Server thread/INFO]: FeelMeLikeABaby left the game
+[12:09:50] [User Authenticator #11/INFO]: UUID of player FeelMeLikeABaby is 3ada24c9-6059-4a33-8675-01a1b44e777b
+[12:09:51] [Server thread/INFO]: FeelMeLikeABaby[/10.108.42.81:62620] logged in with entity id 22210 at (25.043449150165245, 64.0, 78.13958757129706)
+[12:09:51] [Server thread/INFO]: FeelMeLikeABaby joined the game
+[12:09:54] [User Authenticator #12/INFO]: UUID of player LoveMinekwaft is 626999dc-a0f2-467e-bc15-42f8291560b4
+[12:09:54] [Server thread/INFO]: LoveMinekwaft[/10.108.35.164:50636] logged in with entity id 22248 at (-78.69999998807907, 24.0, 211.84584681878246)
+[12:09:54] [Server thread/INFO]: LoveMinekwaft joined the game
+[12:10:39] [Server thread/INFO]: GSM329 has made the advancement [Hidden in the Depths]
+[12:14:02] [Server thread/INFO]: LoveMinekwaft has made the advancement [Diamonds!]
+[12:15:12] [Server thread/INFO]: LoveMinekwaft was slain by Zombie
+[12:18:12] [User Authenticator #13/INFO]: UUID of player mariamk690 is 4df1f153-e4f8-437f-ab3b-d4060378a06e
+[12:18:13] [Server thread/INFO]: mariamk690[/10.108.38.152:33624] logged in with entity id 29367 at (35.19628244499197, 66.0, 67.417202659606)
+[12:18:13] [Server thread/INFO]: mariamk690 joined the game
+[12:18:49] [Server thread/INFO]: LoveMinekwaft has made the advancement [Ol' Betsy]
+[12:18:52] [Server thread/INFO]: LoveMinekwaft has made the advancement [Take Aim]
+[12:19:54] [Server thread/INFO]: GSM329 has made the advancement [Diamonds!]
+[12:20:13] [Server thread/INFO]: GSM329 has made the advancement [Not Today, Thank You]
+[12:22:12] [Server thread/INFO]: mariamk690 was shot by Parched
+[12:23:54] [Server thread/INFO]: Villager dcx['Armorer'/1188, l='ServerLevel[world]', x=40.43, y=67.00, z=66.54] died, message: 'Armorer was slain by Husk'
+[12:24:01] [Server thread/INFO]: Villager dcx['Armorer'/1189, l='ServerLevel[world]', x=47.47, y=67.00, z=65.55] died, message: 'Armorer was slain by Husk'
+[12:24:10] [Server thread/INFO]: Villager dcx['Villager'/1067, l='ServerLevel[world]', x=47.46, y=67.00, z=68.34] died, message: 'Villager was slain by Husk'
+[12:25:32] [Server thread/INFO]: mariamk690 has made the advancement [Hidden in the Depths]
+[12:25:48] [Server thread/INFO]: mariamk690 was blown up by Creeper
+[12:26:49] [Server thread/INFO]: FeelMeLikeABaby lost connection: Disconnected
+[12:26:49] [Server thread/INFO]: FeelMeLikeABaby left the game
+[12:27:14] [Server thread/INFO]: LoveMinekwaft lost connection: Disconnected
+[12:27:14] [Server thread/INFO]: LoveMinekwaft left the game
+[12:27:18] [User Authenticator #14/INFO]: UUID of player FeelMeLikeABaby is 3ada24c9-6059-4a33-8675-01a1b44e777b
+[12:27:18] [Server thread/INFO]: FeelMeLikeABaby[/10.108.42.81:62732] logged in with entity id 37542 at (688.1328279431594, 65.0, -932.6999999880791)
+[12:27:18] [Server thread/INFO]: FeelMeLikeABaby joined the game
+[12:27:25] [User Authenticator #15/INFO]: UUID of player LoveMinekwaft is 626999dc-a0f2-467e-bc15-42f8291560b4
+[12:27:25] [Server thread/INFO]: LoveMinekwaft[/10.108.35.164:49380] logged in with entity id 37861 at (-115.58162326156206, -10.0, 220.4342459455184)
+[12:27:25] [Server thread/INFO]: LoveMinekwaft joined the game
+[12:27:34] [Server thread/INFO]: mariamk690 was shot by Skeleton
+[12:30:28] [Server thread/INFO]: LoveMinekwaft has made the advancement [Ice Bucket Challenge]
+[12:34:18] [Server thread/INFO]: LoveMinekwaft has made the advancement [Suit Up]
+[12:38:06] [Server thread/INFO]: FeelMeLikeABaby lost connection: Disconnected
+[12:38:06] [Server thread/INFO]: FeelMeLikeABaby left the game
+[12:38:26] [Server thread/INFO]: mariamk690 lost connection: Disconnected
+[12:38:26] [Server thread/INFO]: mariamk690 left the game
+[12:38:40] [User Authenticator #16/INFO]: UUID of player mariamk690 is 4df1f153-e4f8-437f-ab3b-d4060378a06e
+[12:38:40] [Server thread/INFO]: mariamk690[/10.108.38.152:64901] logged in with entity id 46995 at (-87.88466138560514, 63.0, -382.33564968026707)
+[12:38:40] [Server thread/INFO]: mariamk690 joined the game
+[12:39:09] [Server thread/INFO]: GSM329 lost connection: Disconnected
+[12:39:09] [Server thread/INFO]: GSM329 left the game
+[12:49:16] [Server thread/INFO]: LoveMinekwaft lost connection: Disconnected
+[12:49:16] [Server thread/INFO]: LoveMinekwaft left the game
+[12:49:25] [User Authenticator #17/INFO]: UUID of player LoveMinekwaft is 626999dc-a0f2-467e-bc15-42f8291560b4
+[12:49:25] [Server thread/INFO]: LoveMinekwaft[/10.108.35.164:59409] logged in with entity id 57011 at (36.596841456396305, 66.0, 69.90960772707814)
+[12:49:25] [Server thread/INFO]: LoveMinekwaft joined the game
+[12:50:13] [Server thread/INFO]: mariamk690 was shot by Pillager
+[12:50:23] [Server thread/INFO]: LoveMinekwaft has made the advancement [Not Today, Thank You]
+[12:50:58] [Server thread/INFO]: mariamk690 was slain by Zombie
+[12:51:04] [Server thread/INFO]: LoveMinekwaft lost connection: Disconnected
+[12:51:04] [Server thread/INFO]: LoveMinekwaft left the game
+[12:51:17] [User Authenticator #18/INFO]: UUID of player LoveMinekwaft is 626999dc-a0f2-467e-bc15-42f8291560b4
+[12:51:17] [Server thread/INFO]: LoveMinekwaft[/10.108.35.164:59418] logged in with entity id 58240 at (-11.601452867602605, 25.0, 163.30546857506985)
+[12:51:17] [Server thread/INFO]: LoveMinekwaft joined the game
+[12:57:39] [Server thread/INFO]: LoveMinekwaft lost connection: Disconnected
+[12:57:39] [Server thread/INFO]: LoveMinekwaft left the game
+[12:57:55] [User Authenticator #19/INFO]: UUID of player LoveMinekwaft is 626999dc-a0f2-467e-bc15-42f8291560b4
+[12:57:55] [Server thread/INFO]: LoveMinekwaft[/10.108.35.164:56383] logged in with entity id 62248 at (37.2721468702061, 66.5625, 64.81088531698214)
+[12:57:55] [Server thread/INFO]: LoveMinekwaft joined the game
+[13:01:56] [Server thread/INFO]: LoveMinekwaft lost connection: Disconnected
+[13:01:56] [Server thread/INFO]: LoveMinekwaft left the game
+[13:03:45] [Server thread/INFO]: mariamk690 fell from a high place
+[13:07:14] [User Authenticator #20/INFO]: UUID of player GSM329 is c0c5e252-1eee-47a9-932e-bf2e7c15bcdb
+[13:07:15] [Server thread/INFO]: GSM329[/10.108.26.221:56448] logged in with entity id 66122 at (-161.88645042203603, 63.0, -234.97101205589325)
+[13:07:15] [Server thread/INFO]: GSM329 joined the game
+[13:08:30] [Server thread/INFO]: GSM329 has made the advancement [Ice Bucket Challenge]
+[13:09:24] [Server thread/INFO]: GSM329 has made the advancement [Voluntary Exile]
+[13:12:26] [Server thread/INFO]: mariamk690 lost connection: Disconnected
+[13:12:26] [Server thread/INFO]: mariamk690 left the game
+[13:13:00] [Server thread/INFO]: GSM329 lost connection: Disconnected
+[13:13:00] [Server thread/INFO]: GSM329 left the game
+[13:13:44] [User Authenticator #21/INFO]: UUID of player mariamk690 is 4df1f153-e4f8-437f-ab3b-d4060378a06e
+[13:13:44] [Server thread/INFO]: mariamk690[/10.108.38.152:58601] logged in with entity id 70199 at (-629.9218247208669, 79.0, -227.1886552760484)
+[13:13:44] [Server thread/INFO]: mariamk690 joined the game
+[13:16:37] [User Authenticator #22/INFO]: UUID of player GSM329 is c0c5e252-1eee-47a9-932e-bf2e7c15bcdb
+[13:16:38] [Server thread/INFO]: GSM329[/10.108.26.221:63084] logged in with entity id 71105 at (-638.254657905821, 80.0, -224.7003758086418)
+[13:16:38] [Server thread/INFO]: GSM329 joined the game
+[13:16:56] [Server thread/INFO]: mariamk690 lost connection: Disconnected
+[13:16:56] [Server thread/INFO]: mariamk690 left the game
+[13:17:06] [User Authenticator #23/INFO]: UUID of player mariamk690 is 4df1f153-e4f8-437f-ab3b-d4060378a06e
+[13:17:07] [Server thread/INFO]: mariamk690[/10.108.38.152:35444] logged in with entity id 71403 at (-460.64720382175375, 62.110764312744145, -415.35534361275626)
+[13:17:07] [Server thread/INFO]: mariamk690 joined the game
+[13:19:20] [User Authenticator #24/INFO]: UUID of player FeelMeLikeABaby is 3ada24c9-6059-4a33-8675-01a1b44e777b
+[13:19:21] [Server thread/INFO]: FeelMeLikeABaby[/10.108.42.81:63194] logged in with entity id 74300 at (856.4803753439403, 64.0, -1411.0457517634934)
+[13:19:21] [Server thread/INFO]: FeelMeLikeABaby joined the game
+[13:26:06] [Server thread/WARN]: Failed to update secure chat state for GSM329: 'Chat disabled due to missing profile public key. Please try reconnecting.'
+[13:28:16] [Server thread/INFO]: mariamk690 lost connection: Disconnected
+[13:28:16] [Server thread/INFO]: mariamk690 left the game
+[13:28:18] [Server thread/INFO]: FeelMeLikeABaby lost connection: Disconnected
+[13:28:18] [Server thread/INFO]: FeelMeLikeABaby left the game
+[13:28:27] [User Authenticator #25/INFO]: UUID of player FeelMeLikeABaby is 3ada24c9-6059-4a33-8675-01a1b44e777b
+[13:28:27] [Server thread/INFO]: FeelMeLikeABaby[/10.108.42.81:63257] logged in with entity id 82160 at (889.3000000119209, 17.0, -1379.0448470016904)
+[13:28:27] [Server thread/INFO]: FeelMeLikeABaby joined the game
+[13:28:31] [User Authenticator #26/INFO]: UUID of player mariamk690 is 4df1f153-e4f8-437f-ab3b-d4060378a06e
+[13:28:32] [Server thread/INFO]: mariamk690[/10.108.38.152:52926] logged in with entity id 82499 at (-982.6999999880791, 64.0, -964.6748375623174)
+[13:28:32] [Server thread/INFO]: mariamk690 joined the game
+[13:34:20] [Server thread/INFO]: FeelMeLikeABaby has made the advancement [Acquire Hardware]
+[13:34:28] [Server thread/INFO]: FeelMeLikeABaby has made the advancement [Isn't It Iron Pick]
+[13:36:31] [Server thread/INFO]: FeelMeLikeABaby has made the advancement [Diamonds!]
+[13:39:09] [Server thread/INFO]: FeelMeLikeABaby lost connection: Disconnected
+[13:39:09] [Server thread/INFO]: FeelMeLikeABaby left the game
+[13:39:36] [User Authenticator #27/INFO]: UUID of player FeelMeLikeABaby is 3ada24c9-6059-4a33-8675-01a1b44e777b
+[13:39:36] [Server thread/INFO]: FeelMeLikeABaby[/10.108.42.81:63326] logged in with entity id 89858 at (900.1738131903084, -14.0, -1354.5052392067205)
+[13:39:36] [Server thread/INFO]: FeelMeLikeABaby joined the game
+[13:42:06] [Server thread/INFO]: FeelMeLikeABaby has made the advancement [Suit Up]
+[13:47:01] [Server thread/INFO]: mariamk690 drowned
+[13:51:00] [Server thread/INFO]: mariamk690 lost connection: Disconnected
+[13:51:00] [Server thread/INFO]: mariamk690 left the game
+[13:51:02] [Server thread/INFO]: FeelMeLikeABaby lost connection: Disconnected
+[13:51:02] [Server thread/INFO]: FeelMeLikeABaby left the game
+[13:51:04] [User Authenticator #28/INFO]: UUID of player FeelMeLikeABaby is 3ada24c9-6059-4a33-8675-01a1b44e777b
+[13:51:05] [Server thread/INFO]: FeelMeLikeABaby[/10.108.42.81:63406] logged in with entity id 98168 at (951.0291172129525, -43.0, -1362.987843899966)
+[13:51:05] [Server thread/INFO]: FeelMeLikeABaby joined the game
+[13:51:13] [User Authenticator #29/INFO]: UUID of player mariamk690 is 4df1f153-e4f8-437f-ab3b-d4060378a06e
+[13:51:13] [Server thread/INFO]: mariamk690[/10.108.38.152:24277] logged in with entity id 98400 at (-984.3432667269503, 64.0, -962.8899004007696)
+[13:51:13] [Server thread/INFO]: mariamk690 joined the game
+[14:03:17] [User Authenticator #30/INFO]: UUID of player LoveMinekwaft is 626999dc-a0f2-467e-bc15-42f8291560b4
+[14:03:18] [Server thread/INFO]: LoveMinekwaft[/10.108.35.164:49444] logged in with entity id 105374 at (66.53102046874439, 69.0, 76.4111758463328)
+[14:03:18] [Server thread/INFO]: LoveMinekwaft joined the game
+[14:06:51] [Server thread/INFO]: Villager dcx['Nitwit'/105349, l='ServerLevel[world]', x=71.19, y=84.42, z=48.97] died, message: 'Nitwit was slain by Husk'
+[14:10:21] [Server thread/INFO]: mariamk690 fell from a high place
+[14:11:45] [Server thread/INFO]: mariamk690 fell from a high place
+[14:14:14] [Server thread/INFO]: mariamk690 fell from a high place
+[14:17:01] [Server thread/INFO]: mariamk690 was slain by Zombie
+[14:19:25] [Server thread/INFO]: mariamk690 was slain by Zombie
+[14:23:42] [Server thread/INFO]: mariamk690 fell from a high place
+[14:25:39] [Server thread/INFO]: Villager dcx['Nitwit'/125452, l='ServerLevel[world]', x=858.40, y=65.00, z=-1395.58] died, message: 'Nitwit was slain by Zombie'
+[14:26:18] [Server thread/INFO]: LoveMinekwaft was shot by Parched
+[14:27:41] [Server thread/INFO]: mariamk690 lost connection: Disconnected
+[14:27:41] [Server thread/INFO]: mariamk690 left the game
+[14:27:45] [Server thread/INFO]: FeelMeLikeABaby has made the advancement [Sweet Dreams]
+[14:28:25] [Server thread/INFO]: LoveMinekwaft was blown up by Creeper
+[14:28:34] [User Authenticator #31/INFO]: UUID of player mariamk690 is 4df1f153-e4f8-437f-ab3b-d4060378a06e
+[14:28:34] [Server thread/INFO]: mariamk690[/10.108.38.152:19210] logged in with entity id 129470 at (-1070.002654248452, 74.0, -1032.867697420941)
+[14:28:34] [Server thread/INFO]: mariamk690 joined the game
+[14:31:37] [Server thread/INFO]: LoveMinekwaft lost connection: Disconnected
+[14:31:37] [Server thread/INFO]: LoveMinekwaft left the game
+[14:35:15] [User Authenticator #32/INFO]: UUID of player LoveMinekwaft is 626999dc-a0f2-467e-bc15-42f8291560b4
+[14:35:16] [Server thread/INFO]: LoveMinekwaft[/10.108.35.164:65478] logged in with entity id 135496 at (68.84876858010679, 71.0, 78.23201513194766)
+[14:35:16] [Server thread/INFO]: LoveMinekwaft joined the game
+[14:36:14] [Server thread/INFO]: Gave 1 [Villager Spawn Egg] to LoveMinekwaft
+[14:36:25] [Server thread/INFO]: Gave 2 [Villager Spawn Egg] to LoveMinekwaft
+[14:36:28] [Server thread/WARN]: Mismatch in destroy block pos: is{x=1146, y=64, z=-1389} is{x=1149, y=62, z=-1389}
+[14:37:51] [Server thread/INFO]: mariamk690 has made the advancement [Acquire Hardware]
+[14:38:04] [Server thread/INFO]: mariamk690 has made the advancement [Isn't It Iron Pick]
+[14:38:31] [Server thread/INFO]: mariamk690 has made the advancement [Diamonds!]
+[14:39:46] [Server thread/INFO]: mariamk690 lost connection: Disconnected
+[14:39:46] [Server thread/INFO]: mariamk690 left the game
+[14:44:31] [Server thread/INFO]: FeelMeLikeABaby has made the advancement [What a Deal!]
+[14:47:04] [User Authenticator #33/INFO]: UUID of player mariamk690 is 4df1f153-e4f8-437f-ab3b-d4060378a06e
+[14:47:05] [Server thread/INFO]: mariamk690[/10.108.38.152:29639] logged in with entity id 144252 at (-1178.1948400786302, -29.0, -1076.3522808470082)
+[14:47:05] [Server thread/INFO]: mariamk690 joined the game
+[14:50:22] [Server thread/WARN]: Can't keep up! Is the server overloaded? Running 3651ms or 73 ticks behind
+[14:50:22] [Server thread/WARN]: GSM329 moved too quickly! 0.9812811731962938,1.252203340253729,9.943063711841333
+[14:52:38] [Server thread/INFO]: FeelMeLikeABaby has made the advancement [A Seedy Place]
+[14:53:26] [Server thread/INFO]: mariamk690 lost connection: Disconnected
+[14:53:26] [Server thread/INFO]: mariamk690 left the game
+[14:54:44] [Server thread/INFO]: GSM329 lost connection: Disconnected
+[14:54:44] [Server thread/INFO]: GSM329 left the game
+[15:01:33] [Server thread/INFO]: FeelMeLikeABaby lost connection: Disconnected
+[15:01:33] [Server thread/INFO]: FeelMeLikeABaby left the game
+[15:14:31] [Server thread/INFO]: LoveMinekwaft lost connection: Disconnected
+[15:14:31] [Server thread/INFO]: LoveMinekwaft left the game
+[15:15:31] [Server thread/INFO]: Server empty for 60 seconds, pausing
+[15:18:37] [User Authenticator #34/INFO]: UUID of player LoveMinekwaft is 626999dc-a0f2-467e-bc15-42f8291560b4
+[15:18:37] [Server thread/INFO]: LoveMinekwaft[/10.108.35.164:50286] logged in with entity id 155789 at (38.48997737210577, 67.0, 69.6573199863297)
+[15:18:37] [Server thread/INFO]: LoveMinekwaft joined the game
+[15:43:52] [Server thread/INFO]: LoveMinekwaft lost connection: Disconnected
+[15:43:52] [Server thread/INFO]: LoveMinekwaft left the game
+[15:44:28] [Server thread/INFO]: Stopping the server
+[15:44:28] [Server thread/INFO]: Stopping server
+[15:44:28] [Server thread/INFO]: Saving players
+[15:44:28] [Server thread/INFO]: Saving worlds
+[15:44:28] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[15:44:28] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_nether
+[15:44:28] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:the_end
+[15:44:28] [Server thread/INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[15:44:28] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[15:44:28] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[15:44:28] [Server thread/INFO]: ThreadedAnvilChunkStorage: All dimensions are saved
