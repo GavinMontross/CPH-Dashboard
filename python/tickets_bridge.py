@@ -9,10 +9,12 @@ from tdx_client import TDXClient
 # -------------------------------------------------
 
 ALL_UIDS = [
-    "80c0c3d5-d245-f011-9fa5-9c0eadb6129c",
-    "8ab9df26-d145-f011-9fa5-9c0eadb6129c",
-    "07d8cdbd-d245-f011-9fa5-9c0eadb6129c",
-    "1acfd965-cf45-f011-9fa5-9c0eadb6129c",
+    "80c0c3d5-d245-f011-9fa5-9c0eadb6129c",  # Gavin
+    "8ab9df26-d145-f011-9fa5-9c0eadb6129c",  # Mariam
+    "07d8cdbd-d245-f011-9fa5-9c0eadb6129c",  # Yasseen
+    "98d7551f-df45-f011-9fa5-9c0eadb6129c",  # Sourish
+    
+    # New hires go here, find in TDX by opening user's profile in new tab, UID will be in URL
 ]
 
 CPH_GROUP_ID = 3974
